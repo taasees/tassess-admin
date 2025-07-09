@@ -1,0 +1,122 @@
+@mixin flex($ai, $jc, $fdr, $gap) {
+  display: flex;
+  align-items: $ai;
+  justify-content: $jc;
+  flex-direction: $fdr;
+  gap: $gap;
+}
+// font 1
+@font-face {
+  font-family: "arabic_Regular_1";
+  src: url("../../fonts/Almarai/Almarai-Regular.ttf");
+}
+@font-face {
+  font-family: "arabic_bold_1";
+  src: url("../../fonts/Almarai/Almarai-Bold.ttf");
+}
+@font-face {
+  font-family: "arabic_ExtraBold_1";
+  src: url("../../fonts/Almarai/Almarai-ExtraBold.ttf");
+}
+//font 2
+@font-face {
+  font-family: "arabic_Regular_2";
+  src: url("../../fonts/Rubik/static/Rubik-Regular.ttf");
+}
+@font-face {
+  font-family: "arabic_bold_2";
+  src: url("../../fonts/Rubik/static/Rubik-Bold.ttf");
+}
+@font-face {
+  font-family: "arabic_ExtraBold_2";
+  src: url("../../fonts/Rubik/static/Rubik-ExtraBold.ttf");
+}
+//font 3
+@font-face {
+  font-family: "arabic_Regular_3";
+  src: url("../../fonts/Fustat/static/Fustat-Regular.ttf");
+}
+@font-face {
+  font-family: "arabic_bold_3";
+  src: url("../../fonts/Fustat/static/Fustat-Bold.ttf");
+}
+@font-face {
+  font-family: "arabic_ExtraBold_3";
+  src: url("../../fonts/Fustat/static/Fustat-ExtraBold.ttf");
+}
+//font 4
+@font-face {
+  font-family: "arabic_Regular_4";
+  src: url("../../fonts/Mada/static/Mada-Regular.ttf");
+}
+@font-face {
+  font-family: "arabic_bold_4";
+  src: url("../../fonts/Mada/static/Mada-Bold.ttf");
+}
+@font-face {
+  font-family: "arabic_ExtraBold_4";
+  src: url("../../fonts/Mada/static/Mada-ExtraBold.ttf");
+}
+// font 5
+@font-face {
+  font-family: "arabic_Regular_5";
+  src: url("../../fonts/Tajawal/Tajawal-Regular.ttf");
+}
+@font-face {
+  font-family: "arabic_bold_5";
+  src: url("../../fonts/Tajawal/Tajawal-Bold.ttf");
+}
+@font-face {
+  font-family: "arabic_ExtraBold_5";
+  src: url("../../fonts/Tajawal/Tajawal-ExtraBold.ttf");
+}
+:root {
+  /* Fonts */
+  --arabic-fm-r: arabic_Regular_1;
+  --arabic-fm-b: arabic_bold_1;
+  --arabic-fm-exb: arabic_ExtraBold_1;
+  /* Base sizes - Mobile First */
+  --font-hero: clamp(2rem, 5vw + 1rem, 2.5rem); /* 32px → 40px */
+  --font-h1: clamp(1.75rem, 4vw + 0.5rem, 2rem); /* 28px → 32px */
+  --font-h2: clamp(1.5rem, 3vw + 0.5rem, 1.75rem); /* 24px → 28px */
+  --font-h3: clamp(1.25rem, 2.5vw + 0.5rem, 1.5rem); /* 20px → 24px */
+  --font-h4: clamp(1.125rem, 2vw + 0.5rem, 1.35rem); /* 18px → 20px */
+  --font-body: clamp(1rem, 1vw + 0.5rem, 1.1rem); /* 15.2px → 16px */
+  --font-small: clamp(0.8rem, 0.75vw + 0.5rem, 0.875rem); /* 12.8px → 14px */
+  --border-radius: 0.5rem; /* 8px */
+  --border-radius2: 1rem; /* 16px */
+  /* Colors */
+  --primary-clr: #ffba00;
+  --primary-clr-light: #fdbf0d;
+  --body-bg-clr: #fff;
+  --body-bg-clr-gray: #efefef;
+  --header-gradient: linear-gradient(45deg, #e47d1a, #f9a513 17.92%, #fdbf0d);
+  --dark-svg-clr: #808080;
+  --light-svg-clr: #ffffff;
+  --txt-clr: #000;
+  --txt-clr-light: #fff;
+  --txt-clr-navy: #0a0624;
+  --txt-clr-gray: #5f6c76;
+  --dark-grey: #3b3b3b;
+  --dark-grey2: #276e9f;
+}
+
+/* Desktop overrides */
+@media (min-width: 768px) {
+  :root {
+    --font-hero: 4rem; /* 64px */
+    --font-h1: 3rem; /* 48px */
+    --font-h2: 2.25rem; /* 36px */
+    --font-h3: 1.875rem; /* 30px */
+    --font-body: 1.125rem; /* 18px */
+    --font-small: 1rem; /* 16px */
+  }
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  interpolate-size: allow-keywords !important;
+  transition-behavior: allow-discrete !important;
+  color: var(--txt-clr);
+}
