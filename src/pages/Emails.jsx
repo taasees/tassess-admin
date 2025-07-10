@@ -15,9 +15,7 @@ export default function Emails() {
 
   useEffect(() => {
     axios
-      .get(
-        "https://jadwa-study-backend.netlify.app/.netlify/functions/app/email/get"
-      )
+      .get("https://shark-consulting-net.onrender.com/email/get")
       .then((response) => {
         setEmails(response.data);
       })

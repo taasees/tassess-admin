@@ -145,12 +145,12 @@ const path = window.location.pathname; // e.g. "/e-commerce-projects"
     if (about._id && about._id.toString().length !== 13) {
       // existing (assumption: tempId is timestamp 13 chars)
       response = await axios.put(
-        `https://jadwa-study-backend.netlify.app/.netlify/functions/app/${lastSegment}/${about._id}`,
+        `https://shark-consulting-net.onrender.com/${lastSegment}/${about._id}`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
     } else {
-      response = await axios.post(`https://jadwa-study-backend.netlify.app/.netlify/functions/app/${lastSegment}`, formData, {
+      response = await axios.post(`https://shark-consulting-net.onrender.com/${lastSegment}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
     }
@@ -167,7 +167,7 @@ const path = window.location.pathname; // e.g. "/e-commerce-projects"
       return;
     }
     try {
-      await axios.delete(`https://jadwa-study-backend.netlify.app/.netlify/functions/app/${lastSegment}/${id}`);
+      await axios.delete(`https://shark-consulting-net.onrender.com/${lastSegment}/${id}`);
       setAboutCards((prev) => prev.filter((_, i) => i !== index));
       toast.success("تم حذف البيانات بنجاح!");
     } catch (err) {
@@ -198,7 +198,7 @@ const path = window.location.pathname; // e.g. "/e-commerce-projects"
   const fetchAboutByCategory = async (category) => {
     try {
       const response = await axios.get(
-        `https://jadwa-study-backend.netlify.app/.netlify/functions/app/category/${category}`
+        `https://shark-consulting-net.onrender.com/category/${category}`
       );
       return response.data; // expecting array of about cards
     } catch (err) {

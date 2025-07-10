@@ -128,7 +128,7 @@ export default function E_commerce_projects() {
     formData.append("category", lastSegment);
 
     const response = await axios.post(
-      "https://jadwa-study-backend.netlify.app/.netlify/functions/app/slides",
+      "https://shark-consulting-net.onrender.com/slides",
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -142,7 +142,7 @@ export default function E_commerce_projects() {
   const deleteCustomSlide = async (id) => {
     try {
       // Call backend to delete by id
-      await axios.delete(`https://jadwa-study-backend.netlify.app/.netlify/functions/app/slides/${id}`);
+      await axios.delete(`https://shark-consulting-net.onrender.com/slides/${id}`);
 
       // Remove from state
       setCustomSlides((prev) => prev.filter((slide) => slide._id !== id));
@@ -155,7 +155,7 @@ export default function E_commerce_projects() {
   const fetchSlidesByCategory = async (category) => {
     try {
       const response = await axios.get(
-        `https://jadwa-study-backend.netlify.app/.netlify/functions/app/slides/category/${category}`
+        `https://shark-consulting-net.onrender.com/slides/category/${category}`
       );
       return response.data; // slides array
     } catch (err) {
@@ -188,7 +188,7 @@ export default function E_commerce_projects() {
 
     try {
       const response = await axios.put(
-        `https://jadwa-study-backend.netlify.app/.netlify/functions/app/slides/${id}`,
+        `https://shark-consulting-net.onrender.com/slides/${id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

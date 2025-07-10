@@ -55,7 +55,7 @@ export default function Edit() {
 
       // Submit to local server
       try {
-        await axios.post("https://jadwa-study-backend.netlify.app/.netlify/functions/app/fonts/set", {
+        await axios.post("https://shark-consulting-net.onrender.com/fonts/set", {
           fontFamily: fontKey,
           fontStyles: fontObject,
         });
@@ -70,7 +70,7 @@ export default function Edit() {
     // Fetch latest saved font from server
     const fetchFont = async () => {
       try {
-        const res = await axios.get("https://jadwa-study-backend.netlify.app/.netlify/functions/app/fonts/latest");
+        const res = await axios.get("https://shark-consulting-net.onrender.com/fonts/latest");
         const { fontFamily, fontStyles } = res.data;
         setSelectedFont(fontFamily);
         document.documentElement.style.setProperty(

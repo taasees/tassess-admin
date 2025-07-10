@@ -150,12 +150,12 @@ function App() {
     if (about._id && about._id.toString().length !== 13) {
       // existing (assumption: tempId is timestamp 13 chars)
       response = await axios.put(
-        `https://jadwa-study-backend.netlify.app/.netlify/functions/app/question/${about._id}`,
+        `https://shark-consulting-net.onrender.com/question/${about._id}`,
         about
       );
     } else {
       response = await axios.post(
-        `https://jadwa-study-backend.netlify.app/.netlify/functions/app/question`,
+        `https://shark-consulting-net.onrender.com/question`,
         about
       );
     }
@@ -172,7 +172,7 @@ function App() {
     }
     try {
       await axios.delete(
-        `https://jadwa-study-backend.netlify.app/.netlify/functions/app/question/${id}`
+        `https://shark-consulting-net.onrender.com/question/${id}`
       );
       setAboutCards((prev) => prev.filter((_, i) => i !== index));
       toast.success("تم حذف البيانات بنجاح!");
@@ -202,7 +202,7 @@ function App() {
   const fetchAboutByCategory = async () => {
     try {
       const response = await axios.get(
-        `https://jadwa-study-backend.netlify.app/.netlify/functions/app/question`
+        `https://shark-consulting-net.onrender.com/question`
       );
       return response.data; // expecting array of about cards
     } catch (err) {
