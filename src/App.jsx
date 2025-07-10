@@ -473,7 +473,7 @@ function App() {
           </div>
         )}
       </section>
-      <div className="count">
+      {/* <div className="count">
         <AnimatedContent threshold={0.5} delay={0.2} duration={1.2}>
           <div className="numbers">
             <span>
@@ -521,7 +521,7 @@ function App() {
             <p>إستشارات إدارية دورية</p>
           </div>
         </AnimatedContent>
-      </div>
+      </div> */}
       <div className="feedback">
         <AnimatedContent threshold={0.7} delay={0.2} duration={1.2}>
           <header className="feedback-header">

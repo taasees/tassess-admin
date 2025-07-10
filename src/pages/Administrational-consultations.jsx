@@ -145,7 +145,9 @@ export default function Administrational_consultations() {
   const deleteCustomSlide = async (id) => {
     try {
       // Call backend to delete by id
-      await axios.delete(`https://shark-consulting-net.onrender.com/slides/${id}`);
+      await axios.delete(
+        `https://shark-consulting-net.onrender.com/slides/${id}`
+      );
 
       // Remove from state
       setCustomSlides((prev) => prev.filter((slide) => slide._id !== id));
