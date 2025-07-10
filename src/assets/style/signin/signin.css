@@ -168,6 +168,7 @@
   font-size: var(--font-body);
   font-family: var(--arabic-fm-r);
   color: var(--txt-clr);
+  background: transparent;
 }
 .signin-pages .main .form label button {
   width: 100%;
