@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from "react";
 import paperwork from "../assets/images/paperwork.jpg";
-import about_1 from "../assets/images/about1.webp";
 // ...import other images
 import "../assets/style/common/aboutPages.css";
 import AnimatedContent from "../components/AnimatedContent";

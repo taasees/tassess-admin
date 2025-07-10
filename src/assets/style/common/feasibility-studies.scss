@@ -175,6 +175,14 @@
           object-fit: cover;
           border-radius: var(--border-radius);
         }
+        input {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          z-index: 1;
+          opacity: 0;
+          cursor: pointer;
+        }
       }
       .text {
         position: relative;

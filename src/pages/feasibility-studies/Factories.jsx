@@ -283,7 +283,7 @@ export default function Factories() {
               <input
                 type="file"
                 accept="image/*"
-                style={fileInputStyle}
+                // style={fileInputStyle}
                 onChange={(e) => handleCustomImageChange(e, index)}
               />
               {slide.img && (
