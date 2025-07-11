@@ -6,6 +6,7 @@ import "../assets/style/signin/signin.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../assets/icons/favicon.ico";
+import bg_img from "../assets/images/bg_img.jpg";
 
 export default function Signin() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function Signin() {
           password: formData.password,
         }
       );
-console.log(response);
+      console.log(response);
       if (response.data.success) {
         toast.success("تم تسجيل الدخول بنجاح");
         localStorage.setItem("token", response.data.token);
@@ -62,17 +63,28 @@ console.log(response);
       exit={{ opacity: 0 }}
       transition={{ duration: 1.3 }}
     >
-      <div className="main">
-        <div className="side">
-          <div className="img">
-            <img src={logo} alt="logo" />
-          </div>
-          <div className="text">
-            <p>تسجيل الدخول</p>
-          </div>
+      <div className="image">
+        <img src={bg_img} alt="" />
+        <div className="logo">
+          <img src={logo} alt="" />
         </div>
-
+        <div className="txt">
+          <h2>شارك للاستشارات</h2>
+          <p>
+            شركة شارِك للإستشارات تقدم خدمات دراسات الجدوى والاستشارات الإدارية
+            للمشاريع في قطر والسعودية والإمارات وعمان منذ عام 2010، بخبرة تتجاوز
+            13 عامًا وأكثر من 1150 دراسة جدوى ناجحة.
+          </p>
+        </div>
+        <div className="bottom">
+          <p>شركة شارِك للاستشارات جهة موثوقة بخبرة تزيد عن 13 عامًا</p>
+        </div>
+      </div>
+      <div className="main">
         <form className="form" onSubmit={handleSubmit}>
+          <div className="top">
+            <h1>تسجيل الدخول</h1>
+          </div>
           <label htmlFor="name">
             <p>اسم المستخدم</p>
             <input

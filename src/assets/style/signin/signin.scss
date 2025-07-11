@@ -5,76 +5,176 @@
   position: relative;
   height: 100dvh;
   overflow: hidden;
-  background: var(--body-bg-clr-gray);
-  @include flex(center, center, column, 0.5rem);
-  .main {
-    width: clamp(600px, 55vw, 850px);
-    @include flex(flex-start, center, row, 1.5rem);
-    flex-wrap: wrap;
-    height: auto;
-    background: var(--body-bg-clr);
-    padding: 3rem;
-    border-radius: var(--border-radius2);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    .form {
-      flex-grow: 1;
+  background: var(--body-bg-clr);
+  @include flex(center, center, row-reverse, 0rem);
+  flex-wrap: wrap;
+  .image {
+    width: clamp(200px, 40%, 900px);
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-content: center;
+    @include flex(center, space-between, column, 0.5rem);
+    overflow: hidden;
+    > img {
+      position: absolute;
+      width: 100%;
       height: 100%;
-      position: relative;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .logo {
+      width: 100%;
+      @include flex(center, flex-end, row, 0.5rem);
+      padding: 1rem 1.5rem;
+      img {
+        width: 40px;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+
+        filter: brightness(0);
+      }
+    }
+    .txt {
+      width: 100%;
+      @include flex(flex-start, center, column, 0.5rem);
+      padding-inline: 3rem;
+
+      h2 {
+        font-size: var(--font-h1);
+        font-family: var(--arabic-fm-exb);
+        color: var(--txt-clr);
+      }
+      p {
+        font-size: var(--font-body);
+        font-family: var(--arabic-fm-r);
+        color: var(--txt-clr);
+      }
+    }
+    .bottom {
+      width: 100%;
+      @include flex(center, flex-start, row, 0.5rem);
+      padding: 3rem;
+      p {
+        font-size: var(--font-small);
+        font-family: var(--arabic-fm-r);
+        color: var(--txt-clr);
+      }
+    }
+  }
+  .main {
+    width: 60%;
+    height: 100%;
+    background: var(--body-bg-clr);
+    @include flex(center, center, column, 0rem);
+    .form {
+      width: clamp(150px, 60%, 400px);
       @include flex(center, center, column, 1rem);
+      padding: 1rem;
+      .top {
+        width: 100%;
+        display: grid;
+        place-content: center;
+        margin-bottom: 3rem;
+        h1 {
+          font-size: var(--font-h1);
+          font-family: var(--arabic-fm-exb);
+          text-align: center;
+          color: var(--txt-clr);
+        }
+      }
       label {
         width: 100%;
+        position: relative;
+        font-family: var(--arabic-fm-r);
+        font-size: var(--font-body);
         @include flex(flex-start, center, column, 0.5rem);
-        p {
-          font-size: var(--font-body);
-          font-family: var(--arabic-fm-r);
-          color: var(--txt-clr);
-        }
+        margin-top: 1rem;
         input {
           width: 100%;
-          border: 1px solid var(--dark-svg-clr);
-          padding: 0.5rem;
-          padding-inline: 1rem;
-          border-radius: var(--border-radius);
-          font-size: var(--font-body);
-          font-family: var(--arabic-fm-r);
-          color: var(--txt-clr);
           background: transparent;
+          border: 1px solid lightgray;
+          padding: 0.5rem 1rem;
+          border-radius: var(--border-radius);
+          color: var(--txt-clr);
+          &:focus {
+            border: 1px solid var(--txt-clr);
+          }
+        }
+        p {
+          color: var(--txt-clr);
         }
         button {
-          width: 100%;
-          background: var(--primary-clr);
-          font-size: var(--font-body);
-          font-family: var(--arabic-fm-r);
-          color: var(--txt-clr-light);
           margin-top: 1rem;
+          width: 100%;
+          background: var(--txt-clr);
+          color: var(--body-bg-clr);
+          padding: 0.7rem 1rem;
+          font-family: var(--arabic-fm-exb);
           border-radius: var(--border-radius);
         }
       }
     }
-    .side {
-      width: 45%;
-      height: 100%;
-      position: relative;
-      padding: 0;
-      @include flex(flex-start, flex-start, column, 0rem);
-      .img {
-        position: relative;
-        width: 50px;
-        aspect-ratio: 1/1;
-        border-radius: 50%;
-        overflow: hidden;
+  }
+}
+@media (max-width: 1000px) {
+  .signin-pages {
+    @include flex(center, flex-start !important, column, 0rem);
+
+    .image {
+      width: clamp(200px, 100%, 1000px) !important;
+      height: 25% !important;
+      @include flex(center, space-between, column, 0.5rem);
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      .logo {
+        width: 100%;
+        @include flex(center, flex-end, row, 0.5rem);
+        padding: 1rem 1.5rem;
         img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
+          width: 20px;
+          aspect-ratio: 1/1;
+          object-fit: cover;
         }
       }
-      .text {
+      .txt {
         width: 100%;
+        padding-inline: 3rem;
+        margin-bottom: auto;
+        h2 {
+          width: 100%;
+          text-align: center;
+        }
         p {
-          font-size: var(--font-h4);
-          font-family: var(--arabic-fm-exb);
-          color: var(--primary-clr);
+          display: none;
+        }
+      }
+      .bottom {
+        display: none;
+      }
+    }
+    .main {
+      width: 100%;
+      height: fit-content !important;
+      background: var(--body-bg-clr);
+      @include flex(center, center !important, column, 0rem);
+      .form {
+        width: clamp(150px, 90%, 400px);
+        @include flex(center, center, column, 1rem);
+        padding: 1rem;
+        .top {
+          width: 100%;
+          display: grid;
+          place-content: center;
+          margin-bottom: 3rem;
+          h1 {
+            font-size: var(--font-h1);
+            font-family: var(--arabic-fm-exb);
+            text-align: center;
+            color: var(--txt-clr);
+          }
         }
       }
     }
