@@ -41,7 +41,7 @@
       width: 100%;
       @include flex(flex-start, center, column, 0.5rem);
       padding-inline: 3rem;
-
+      mix-blend-mode: difference;
       h2 {
         font-size: var(--font-h1);
         font-family: var(--arabic-fm-exb);
@@ -57,6 +57,8 @@
       width: 100%;
       @include flex(center, flex-start, row, 0.5rem);
       padding: 3rem;
+      mix-blend-mode: difference;
+
       p {
         font-size: var(--font-small);
         font-family: var(--arabic-fm-r);

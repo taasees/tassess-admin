@@ -171,6 +171,7 @@
   flex-direction: column;
   gap: 0.5rem;
   padding-inline: 3rem;
+  mix-blend-mode: difference;
 }
 .signin-pages .image .txt h2 {
   font-size: var(--font-h1);
@@ -190,6 +191,7 @@
   flex-direction: row;
   gap: 0.5rem;
   padding: 3rem;
+  mix-blend-mode: difference;
 }
 .signin-pages .image .bottom p {
   font-size: var(--font-small);
