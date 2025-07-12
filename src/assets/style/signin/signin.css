@@ -328,6 +328,9 @@
   justify-content: flex-start;
   flex-direction: row;
   gap: 0rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 @media (max-width: 1000px) {
