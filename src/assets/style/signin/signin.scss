@@ -95,16 +95,26 @@
         input {
           width: 100%;
           background: transparent;
-          border: 1px solid lightgray;
+          border: none;
+          border-bottom: 1px solid lightgray;
           padding: 0.5rem 1rem;
-          border-radius: var(--border-radius);
+          border-radius: 0;
+          outline: none;
           color: var(--txt-clr);
-          &:focus {
-            border: 1px solid var(--txt-clr);
-          }
+          margin-top: 3ch;
         }
         p {
-          color: var(--txt-clr);
+          position: absolute;
+          color: var(--txt-clr-lightgray);
+          transition: all 0.3s ease;
+          pointer-events: none;
+        }
+        &:has(input:focus),
+        &:has(input:not(:placeholder-shown)) {
+          p {
+            transform: translateY(-3ch);
+            color: var(--txt-clr);
+          }
         }
         button {
           margin-top: 1rem;
@@ -129,9 +139,8 @@
       @include flex(center, space-between, column, 0.5rem);
       border-top-left-radius: 1rem;
       border-top-right-radius: 1rem;
-      img{
-      object-position: center 23%;
-
+      img {
+        object-position: center 23%;
       }
       .logo {
         width: 100%;

@@ -84,6 +84,7 @@
   --light-svg-clr: #ffffff;
   --txt-clr: #000;
   --txt-clr-light: #fff;
+  --txt-clr-lightgray:lightgray;
   --txt-clr-navy: #0a0624;
   --txt-clr-gray: #5f6c76;
   --dark-grey: #3b3b3b;
@@ -241,15 +242,26 @@
 .signin-pages .main .form label input {
   width: 100%;
   background: transparent;
-  border: 1px solid lightgray;
+  border: none;
+  border-bottom: 1px solid lightgray;
   padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
+  border-radius: 0;
+  outline: none;
   color: var(--txt-clr);
-}
-.signin-pages .main .form label input:focus {
-  border: 1px solid var(--txt-clr);
+  margin-top: 3ch;
 }
 .signin-pages .main .form label p {
+  position: absolute;
+  color: var(--txt-clr-lightgray);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+.signin-pages .main .form label:has(input:not(:-moz-placeholder-shown)) p {
+  transform: translateY(-3ch);
+  color: var(--txt-clr);
+}
+.signin-pages .main .form label:has(input:focus) p, .signin-pages .main .form label:has(input:not(:placeholder-shown)) p {
+  transform: translateY(-3ch);
   color: var(--txt-clr);
 }
 .signin-pages .main .form label button {

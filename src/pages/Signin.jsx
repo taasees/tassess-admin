@@ -93,6 +93,7 @@ export default function Signin() {
               value={formData.name}
               onChange={handleChange}
               disabled={loading}
+              placeholder=""
             />
           </label>
 
@@ -104,6 +105,7 @@ export default function Signin() {
               value={formData.password}
               onChange={handleChange}
               disabled={loading}
+              placeholder=""
             />
           </label>
 
