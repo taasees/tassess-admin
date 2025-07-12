@@ -174,12 +174,12 @@
 .signin-pages .image .txt h2 {
   font-size: var(--font-h1);
   font-family: var(--arabic-fm-exb);
-  color: var(--txt-clr);
+  color: var(--txt-clr-light);
 }
 .signin-pages .image .txt p {
   font-size: var(--font-body);
   font-family: var(--arabic-fm-r);
-  color: var(--txt-clr);
+  color: var(--txt-clr-light);
 }
 .signin-pages .image .bottom {
   width: 100%;
@@ -193,7 +193,7 @@
 .signin-pages .image .bottom p {
   font-size: var(--font-small);
   font-family: var(--arabic-fm-r);
-  color: var(--txt-clr);
+  color: var(--txt-clr-light);
 }
 .signin-pages .main {
   width: 60%;

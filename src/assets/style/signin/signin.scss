@@ -45,12 +45,12 @@
       h2 {
         font-size: var(--font-h1);
         font-family: var(--arabic-fm-exb);
-        color: var(--txt-clr);
+        color: var(--txt-clr-light);
       }
       p {
         font-size: var(--font-body);
         font-family: var(--arabic-fm-r);
-        color: var(--txt-clr);
+        color: var(--txt-clr-light);
       }
     }
     .bottom {
@@ -60,7 +60,7 @@
       p {
         font-size: var(--font-small);
         font-family: var(--arabic-fm-r);
-        color: var(--txt-clr);
+        color: var(--txt-clr-light);
       }
     }
   }
