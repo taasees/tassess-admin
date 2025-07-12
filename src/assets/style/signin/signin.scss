@@ -92,6 +92,41 @@
         font-size: var(--font-body);
         @include flex(flex-start, center, column, 0.5rem);
         margin-top: 1rem;
+        > .pass {
+          width: 100%;
+          position: relative;
+          @include flex(flex-end, space-between, row, 0.5rem);
+          input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid lightgray;
+            padding: 0.5rem 1rem;
+            padding-left: 40px;
+            border-radius: 0;
+            outline: none;
+            color: var(--txt-clr);
+            margin-top: 3ch;
+            font-family: var(--arabic-fm-r);
+            font-size: var(--font-body);
+          }
+          > .toggle {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            left: 0rem;
+            display: grid;
+            place-content: center;
+            background: none;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 0;
+            svg {
+              fill: var(--dark-svg-clr);
+            }
+          }
+        }
         input {
           width: 100%;
           background: transparent;
@@ -102,10 +137,15 @@
           outline: none;
           color: var(--txt-clr);
           margin-top: 3ch;
+          font-family: var(--arabic-fm-r);
+          font-size: var(--font-body);
         }
+
         p {
           position: absolute;
           color: var(--txt-clr-lightgray);
+          font-family: var(--arabic-fm-r);
+          font-size: var(--font-body);
           transition: all 0.3s ease;
           pointer-events: none;
         }

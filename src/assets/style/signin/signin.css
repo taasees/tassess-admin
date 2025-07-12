@@ -239,6 +239,45 @@
   gap: 0.5rem;
   margin-top: 1rem;
 }
+.signin-pages .main .form label > .pass {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+.signin-pages .main .form label > .pass input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid lightgray;
+  padding: 0.5rem 1rem;
+  padding-left: 40px;
+  border-radius: 0;
+  outline: none;
+  color: var(--txt-clr);
+  margin-top: 3ch;
+  font-family: var(--arabic-fm-r);
+  font-size: var(--font-body);
+}
+.signin-pages .main .form label > .pass > .toggle {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  left: 0rem;
+  display: grid;
+  place-content: center;
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 0;
+}
+.signin-pages .main .form label > .pass > .toggle svg {
+  fill: var(--dark-svg-clr);
+}
 .signin-pages .main .form label input {
   width: 100%;
   background: transparent;
@@ -249,10 +288,14 @@
   outline: none;
   color: var(--txt-clr);
   margin-top: 3ch;
+  font-family: var(--arabic-fm-r);
+  font-size: var(--font-body);
 }
 .signin-pages .main .form label p {
   position: absolute;
   color: var(--txt-clr-lightgray);
+  font-family: var(--arabic-fm-r);
+  font-size: var(--font-body);
   transition: all 0.3s ease;
   pointer-events: none;
 }
