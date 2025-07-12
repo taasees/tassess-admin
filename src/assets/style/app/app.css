@@ -117,6 +117,7 @@ body {
   min-height: 100dvh;
   overflow: overlay;
   overflow-x: hidden;
+  background: black;
 }
 body .container {
   position: relative;
