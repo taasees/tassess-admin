@@ -349,10 +349,6 @@
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
   }
-  .signin-pages .image img {
-    -o-object-position: center 23%;
-       object-position: center 23%;
-  }
   .signin-pages .image .logo {
     width: 100%;
     display: flex;

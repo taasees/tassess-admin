@@ -188,9 +188,9 @@
       @include flex(center, space-between, column, 0.5rem);
       border-top-left-radius: 1rem;
       border-top-right-radius: 1rem;
-      img {
-        object-position: center 23%;
-      }
+    //   img {
+    //     object-position: center 23%;
+    //   }
       .logo {
         width: 100%;
         @include flex(center, flex-end, row, 0.5rem);
