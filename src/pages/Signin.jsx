@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../assets/icons/favicon.ico";
 import bg_img from "../assets/images/bg_img.jpg";
+import TextPressure from "../components/animation/txt";
 
 export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
@@ -93,6 +94,7 @@ export default function Signin() {
         </div>
         <div className="txt">
           <h2>شارك للاستشارات</h2>
+
           <p>
             شركة شارِك للإستشارات تقدم خدمات دراسات الجدوى والاستشارات الإدارية
             للمشاريع في قطر والسعودية والإمارات وعمان منذ عام 2010، بخبرة تتجاوز
@@ -149,6 +151,21 @@ export default function Signin() {
             </button>
           </label>
         </form>
+        <div className="bottom">
+          <div className="txt" dir="ltr">
+            <TextPressure
+              text="shark-plan.com"
+              flex={false}
+              alpha={false}
+              stroke={false}
+              width={true}
+              weight={true}
+              textColor="#000"
+              strokeColor="#ff0000"
+              minFontSize={36}
+            />
+          </div>
+        </div>
       </div>
 
       <ToastContainer
