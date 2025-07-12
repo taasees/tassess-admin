@@ -34,7 +34,8 @@ import NotFound from "./pages/NotFound.jsx";
 import Mobile_nav from "./components/mobile_nav.jsx";
 import Dialog from "./components/Dialog.jsx";
 import Edit from "./components/Edit.jsx";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useLayoutEffect } from "react";
+
 
 function isAuthenticated() {
   return !!localStorage.getItem("token");
@@ -66,79 +67,95 @@ function LayoutWrapper({ children }) {
   );
 }
 
+function AuthGate({ children }) {
+  const [ready, setReady] = useState(false);
+
+  useLayoutEffect(() => {
+    const token = localStorage.getItem("token");
+    // Simulate check or async call
+    requestAnimationFrame(() => setReady(true));
+  }, []);
+
+  if (!ready) return null; // or return a loading spinner
+  return children;
+}
+
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <LayoutWrapper>
-        <Routes>
-          {/* Protected Routes */}
-          <Route path="/" element={<ProtectedRoute element={<App />} />} />
-          <Route
-            path="/about"
-            element={<ProtectedRoute element={<About />} />}
-          />
-          <Route
-            path="/why-us"
-            element={<ProtectedRoute element={<WhyUs />} />}
-          />
-          <Route
-            path="/factories"
-            element={<ProtectedRoute element={<Factories />} />}
-          />
-          <Route
-            path="/restaurants"
-            element={<ProtectedRoute element={<Restaurants />} />}
-          />
-          <Route
-            path="/schools"
-            element={<ProtectedRoute element={<Schools />} />}
-          />
-          <Route
-            path="/farms"
-            element={<ProtectedRoute element={<Farms />} />}
-          />
-          <Route
-            path="/E-commerce-projects"
-            element={<ProtectedRoute element={<E_commerce_projects />} />}
-          />
-          <Route
-            path="/Medical-sector"
-            element={<ProtectedRoute element={<Medical_sector />} />}
-          />
-          <Route
-            path="/other-projects"
-            element={<ProtectedRoute element={<Other_projects />} />}
-          />
-          <Route
-            path="/Administrational-consultations"
-            element={
-              <ProtectedRoute element={<Administrational_consultations />} />
-            }
-          />
-          <Route
-            path="/files-management"
-            element={<ProtectedRoute element={<Files_management />} />}
-          />
-          <Route
-            path="/previous-works"
-            element={<ProtectedRoute element={<Previous_works />} />}
-          />
-          <Route
-            path="/feasibility-studies"
-            element={<ProtectedRoute element={<Feasibility_studies />} />}
-          />
-          <Route
-            path="/contact-request"
-            element={<ProtectedRoute element={<Emails />} />}
-          />
+      <AuthGate>
+        <LayoutWrapper>
+          <Routes>
+            {/* Protected Routes */}
+            <Route path="/" element={<ProtectedRoute element={<App />} />} />
+            <Route
+              path="/about"
+              element={<ProtectedRoute element={<About />} />}
+            />
+            <Route
+              path="/why-us"
+              element={<ProtectedRoute element={<WhyUs />} />}
+            />
+            <Route
+              path="/factories"
+              element={<ProtectedRoute element={<Factories />} />}
+            />
+            <Route
+              path="/restaurants"
+              element={<ProtectedRoute element={<Restaurants />} />}
+            />
+            <Route
+              path="/schools"
+              element={<ProtectedRoute element={<Schools />} />}
+            />
+            <Route
+              path="/farms"
+              element={<ProtectedRoute element={<Farms />} />}
+            />
+            <Route
+              path="/E-commerce-projects"
+              element={<ProtectedRoute element={<E_commerce_projects />} />}
+            />
+            <Route
+              path="/Medical-sector"
+              element={<ProtectedRoute element={<Medical_sector />} />}
+            />
+            <Route
+              path="/other-projects"
+              element={<ProtectedRoute element={<Other_projects />} />}
+            />
+            <Route
+              path="/Administrational-consultations"
+              element={
+                <ProtectedRoute element={<Administrational_consultations />} />
+              }
+            />
+            <Route
+              path="/files-management"
+              element={<ProtectedRoute element={<Files_management />} />}
+            />
+            <Route
+              path="/previous-works"
+              element={<ProtectedRoute element={<Previous_works />} />}
+            />
+            <Route
+              path="/feasibility-studies"
+              element={<ProtectedRoute element={<Feasibility_studies />} />}
+            />
+            <Route
+              path="/contact-request"
+              element={<ProtectedRoute element={<Emails />} />}
+            />
 
-          {/* Auth Route */}
-          <Route path="/user/signin" element={<Signin />} />
+            {/* Auth Route */}
+            <Route path="/user/signin" element={<Signin />} />
 
-          {/* 404 Route */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </LayoutWrapper>
+            {/* 404 */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </LayoutWrapper>
+      </AuthGate>
     </BrowserRouter>
   </StrictMode>
 );
