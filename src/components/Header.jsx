@@ -1,28 +1,69 @@
-import { React, useState, useEffect, useRef } from "react";
+import { React, useState, useEffect, useRef, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
 import "../assets/style/header/header.css";
 import logo from "../assets/images/Logo_1.webp";
-
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 export default function Header() {
   const [isSideOpen, setIsSideOpen] = useState(false);
+  const [menuTxt, setmenuTxt] = useState({});
   const [isScrolled, setIsScrolled] = useState(false);
-  const [openDetail, setOpenDetail] = useState(null); // track open dropdown
-
+  const [openDetail, setOpenDetail] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const editedValues = useRef({});
   const sidebarRef = useRef(null);
-  function openDialog() {
-    const dialog = document.querySelector(".dialog");
-    if (dialog) {
-      dialog.style.display = "flex"; // make visible first
-      setTimeout(() => {
-        dialog.classList.add("open"); // trigger opacity animation
-      }, 10); // slight delay to allow reflow
+
+  const handleInput = (e, key) => {
+    editedValues.current[key] = e.target.innerText;
+  };
+  const toggleEditing = () => {
+    setIsEditing(!isEditing);
+    if (isEditing) {
+      submitEditableText(editedValues.current);
+      console.log("Saved Values:", editedValues.current);
     }
-  }
+  };
+
   const toggleSidebar = () => setIsSideOpen((prev) => !prev);
 
   const toggleDetails = (id) => {
     setOpenDetail((prev) => (prev === id ? null : id));
   };
+  async function submitEditableText(data) {
+    try {
+      const response = await axios.post(
+        "http://localhost:5005/menu/save",
+        data
+      );
+      console.log(response);
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success("تم الحفظ بنجاح!");
+      } else {
+        throw error;
+      }
+    } catch (error) {
+      toast.error("فشل في الحفظ!");
+      console.log(error);
+    }
+  }
+  useLayoutEffect(() => {
+    getMenu();
+  }, []);
+  async function getMenu() {
+    try {
+      const response = await axios.get("http://localhost:5005/menu/");
+
+      if (response.status === 200 || response.status === 201) {
+        setmenuTxt((prev) => (prev = response.data.menu));
+      } else {
+        throw error;
+      }
+    } catch (error) {
+      toast.error("فشل في الحفظ!");
+      console.log(error);
+    }
+  }
 
   const menu = (
     <svg
@@ -45,18 +86,6 @@ export default function Header() {
       fill="#FFFFFF"
     >
       <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56Z" />
-    </svg>
-  );
-
-  const more = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      height="24px"
-      viewBox="0 -960 960 960"
-      width="24px"
-      fill="#FFFFFF"
-    >
-      <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
     </svg>
   );
 
@@ -94,78 +123,232 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+  const handleLinkClick = (e) => {
+    if (isEditing) {
+      e.preventDefault();
+    }
+  };
+  const edit = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      fill="#FFFFFF"
+    >
+      <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+    </svg>
+  );
+  const save = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      fill="#FFFFFF"
+    >
+      <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+    </svg>
+  );
   return (
     <header className={`main_header ${isScrolled ? "scrolled" : ""}`}>
       <nav dir="auto">
         <ul>
           <li>
-            <Link to="/">الرئيسية</Link>
+            <Link
+              to="/"
+              contentEditable={isEditing}
+              suppressContentEditableWarning
+              onInput={(e) => handleInput(e, "home")}
+              onClick={handleLinkClick}
+            >
+              {menuTxt.home}
+            </Link>
           </li>
           <li>
-            <p>عنا</p>
+            <p
+              contentEditable={isEditing}
+              suppressContentEditableWarning
+              onInput={(e) => handleInput(e, "aboutLabel")}
+            >
+              {menuTxt.aboutLabel}
+            </p>
             <span>{downArrow}</span>
             <div className="droplist">
               <ul>
                 <li>
-                  <Link to="/about">عن شارِك للإستشارات</Link>
+                  <Link
+                    to="/about"
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning
+                    onInput={(e) => handleInput(e, "about")}
+                    onClick={handleLinkClick}
+                  >
+                    {menuTxt.about}
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/why-us">لماذا شارِك للإستشارات؟</Link>
+                  <Link
+                    to="/why-us"
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning
+                    onInput={(e) => handleInput(e, "whyUs")}
+                    onClick={handleLinkClick}
+                  >
+                    {menuTxt.whyUs}
+                  </Link>
                 </li>
               </ul>
             </div>
           </li>
           <li>
-            <Link to={"/feasibility-studies"}>دراسات الجدوى</Link>
+            <Link
+              to="/feasibility-studies"
+              contentEditable={isEditing}
+              suppressContentEditableWarning
+              onInput={(e) => handleInput(e, "studies")}
+              onClick={handleLinkClick}
+            >
+              {menuTxt.studies}
+            </Link>
             <span>{downArrow}</span>
             <div className="droplist">
               <ul dir="auto">
                 <li>
-                  <Link to="/factories">المصانع</Link>
-                </li>
-                <li>
-                  <Link to="/restaurants">المطاعم</Link>
-                </li>
-                <li>
-                  <Link to="/schools">المدارس</Link>
-                </li>
-                <li>
-                  <Link to="/farms">المزارع</Link>
-                </li>
-                <li>
-                  <Link to="/e-commerce-projects">
-                    مشروعات التجارة الالكترونية
+                  <Link
+                    to="/factories"
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning
+                    onInput={(e) => handleInput(e, "factories")}
+                    onClick={handleLinkClick}
+                  >
+                    {menuTxt.factories}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/medical-sector">القطاع الطبي</Link>
+                  <Link
+                    to="/restaurants"
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning
+                    onInput={(e) => handleInput(e, "restaurants")}
+                    onClick={handleLinkClick}
+                  >
+                    {menuTxt.restaurants}
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/other-projects">مشروعات اخرى</Link>
+                  <Link
+                    to="/schools"
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning
+                    onInput={(e) => handleInput(e, "schools")}
+                    onClick={handleLinkClick}
+                  >
+                    {menuTxt.schools}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/farms"
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning
+                    onInput={(e) => handleInput(e, "farms")}
+                    onClick={handleLinkClick}
+                  >
+                    {menuTxt.farms}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/e-commerce-projects"
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning
+                    onInput={(e) => handleInput(e, "ecommerce")}
+                    onClick={handleLinkClick}
+                  >
+                    {menuTxt.ecommerce}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/medical-sector"
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning
+                    onInput={(e) => handleInput(e, "medical")}
+                    onClick={handleLinkClick}
+                  >
+                    {menuTxt.medical}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/other-projects"
+                    contentEditable={isEditing}
+                    suppressContentEditableWarning
+                    onInput={(e) => handleInput(e, "others")}
+                    onClick={handleLinkClick}
+                  >
+                    {menuTxt.others}
+                  </Link>
                 </li>
               </ul>
             </div>
           </li>
           <li>
-            <Link to="/Administrational-consultations">إستشارات إدارية</Link>
+            <Link
+              to="/Administrational-consultations"
+              contentEditable={isEditing}
+              suppressContentEditableWarning
+              onInput={(e) => handleInput(e, "adminConsult")}
+              onClick={handleLinkClick}
+            >
+              {menuTxt.adminConsult}
+            </Link>
           </li>
           <li>
-            <Link to="/files-management">إدارة الملفات</Link>
+            <Link
+              to="/files-management"
+              contentEditable={isEditing}
+              suppressContentEditableWarning
+              onInput={(e) => handleInput(e, "filesMgmt")}
+              onClick={handleLinkClick}
+            >
+              {menuTxt.filesMgmt}
+            </Link>
           </li>
           <li>
-            <Link to="/previous-works">سابقة الأعمال</Link>
+            <Link
+              to="/previous-works"
+              contentEditable={isEditing}
+              suppressContentEditableWarning
+              onInput={(e) => handleInput(e, "prevWork")}
+              onClick={handleLinkClick}
+            >
+              {menuTxt.prevWork}
+            </Link>
           </li>
           <li>
-            <Link to="/contact-request">طلب تواصل</Link>
+            <Link
+              to="/contact-request"
+              contentEditable={isEditing}
+              suppressContentEditableWarning
+              onInput={(e) => handleInput(e, "contact")}
+              onClick={handleLinkClick}
+            >
+              {menuTxt.contact}
+            </Link>
           </li>
           <li>
             <Link
               to="https://wa.me/97455225488?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%D9%83%D9%85"
               target="_blank"
               rel="noopener noreferrer"
+              contentEditable={isEditing}
+              suppressContentEditableWarning
+              onInput={(e) => handleInput(e, "whatsapp")}
+              onClick={handleLinkClick}
             >
-              WhatsApp
+              {menuTxt.whatsapp}
             </Link>
             <span>{downArrow}</span>
           </li>
@@ -175,7 +358,9 @@ export default function Header() {
       <Link to="/" className="logo">
         <img src={logo} alt="logo" />
       </Link>
-
+      <button onClick={toggleEditing} className="editbtn">
+        {isEditing ? save : edit}
+      </button>
       <div
         className="menu open"
         onClick={toggleSidebar}
@@ -216,10 +401,10 @@ export default function Header() {
                 <div>
                   <ul>
                     <li>
-                      <Link to="/about">عن شارِك للإستشارات</Link>
+                      <Link to="/about">{menuTxt.about}</Link>
                     </li>
                     <li>
-                      <Link to="/why-us">لماذا شارِك للإستشارات؟</Link>
+                      <Link to="/why-us">{menuTxt.whyUs}</Link>
                     </li>
                   </ul>
                 </div>
@@ -232,33 +417,31 @@ export default function Header() {
                 onClick={() => toggleDetails("feasibility")}
               >
                 <summary>
-                  <p>دراسات الجدوى</p>
+                  <p>{menuTxt.studies}</p>
                   <span></span>
                 </summary>
                 <div>
                   <ul>
                     <li>
-                      <Link to="/factories">المصانع</Link>
+                      <Link to="/factories">{menuTxt.factories}</Link>
                     </li>
                     <li>
-                      <Link to="/restaurants">المطاعم</Link>
+                      <Link to="/restaurants">{menuTxt.restaurants}</Link>
                     </li>
                     <li>
-                      <Link to="/schools">المدارس</Link>
+                      <Link to="/schools">{menuTxt.schools}</Link>
                     </li>
                     <li>
-                      <Link to="/farms">المزارع</Link>
+                      <Link to="/farms">{menuTxt.farms}</Link>
                     </li>
                     <li>
-                      <Link to="/e-commerce-projects">
-                        مشروعات التجارة الالكترونية
-                      </Link>
+                      <Link to="/e-commerce-projects">{menuTxt.ecommerce}</Link>
                     </li>
                     <li>
-                      <Link to="/medical-sector">القطاع الطبي</Link>
+                      <Link to="/medical-sector">{menuTxt.medical}</Link>
                     </li>
                     <li>
-                      <Link to="/other-projects">مشروعات اخرى</Link>
+                      <Link to="/other-projects">{menuTxt.others}</Link>
                     </li>
                   </ul>
                 </div>
@@ -266,17 +449,17 @@ export default function Header() {
 
               <li>
                 <Link to="/Administrational-consultations">
-                  استشارات ادارية
+                  {menuTxt.adminConsult}
                 </Link>
               </li>
               <li>
-                <Link to="/files-management">ادارة الملفات</Link>
+                <Link to="/files-management">{menuTxt.filesMgmt}</Link>
               </li>
               <li>
-                <Link to="/previous-works">سابقة الاعمال</Link>
+                <Link to="/previous-works">{menuTxt.prevWork}</Link>
               </li>
               <li>
-                <Link to="/contact-request">سابقة الاعمال</Link>
+                <Link to="/contact-request">{menuTxt.contact}</Link>
               </li>
             </ul>
           </nav>

@@ -126,7 +126,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  gap: 4.5rem;
+  gap: 2.5rem;
   transition: all 0.3s ease;
 }
 .main_header > nav {
@@ -221,6 +221,7 @@
 }
 .main_header > nav > ul > li .droplist ul li a {
   color: var(--txt-clr-light);
+  width: 100%;
 }
 .main_header > nav > ul > li .droplist ul li:hover {
   border-left: 2px solid var(--primary-clr);
@@ -261,6 +262,16 @@
   height: 100%;
   -o-object-fit: contain;
      object-fit: contain;
+}
+.main_header .editbtn {
+  background: transparent;
+  border: none;
+  display: grid;
+  place-content: center;
+  outline: none;
+}
+.main_header .editbtn svg {
+  fill: var(--light-svg-clr);
 }
 .main_header > .side,
 .main_header .menu {
@@ -375,6 +386,9 @@
     height: 100%;
     -o-object-fit: contain;
        object-fit: contain;
+  }
+  .main_header .editbtn {
+    display: none;
   }
   .main_header .menu {
     position: relative;

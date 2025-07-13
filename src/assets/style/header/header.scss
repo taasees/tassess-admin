@@ -12,7 +12,7 @@
   z-index: 99999;
   padding-inline: 1rem;
   //   overflow: hidden;
-  @include flex(center, center, row, 4.5rem);
+  @include flex(center, center, row, 2.5rem);
   transition: all 0.3s ease;
 
   > nav {
@@ -87,6 +87,7 @@
               cursor: pointer;
               a {
                 color: var(--txt-clr-light);
+                width: 100%;
               }
               &:hover {
                 border-left: 2px solid var(--primary-clr);
@@ -135,7 +136,16 @@
       object-fit: contain;
     }
   }
-
+  .editbtn {
+    background: transparent;
+    border: none;
+    display: grid;
+    place-content: center;
+    outline: none;
+    svg {
+      fill: var(--light-svg-clr);
+    }
+  }
   > .side,
   .menu {
     display: none;
@@ -260,6 +270,9 @@
         height: 100%;
         object-fit: contain;
       }
+    }
+    .editbtn {
+      display: none;
     }
     .menu {
       position: relative;
