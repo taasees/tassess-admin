@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect, useState, useLayoutEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
@@ -10,14 +10,16 @@ import {
   Route,
   Navigate,
   useLocation,
+  useRoutes,
 } from "react-router-dom";
 import ScrollToTop from "./components/animation/ScrollToTop.jsx";
+import axios from "axios";
 
-// Import pages
+// Pages
 import About from "./pages/About.jsx";
 import WhyUs from "./pages/WhyUs.jsx";
 import Factories from "./pages/feasibility-studies/Factories.jsx";
-import Restaurants from "./pages/feasibility-studies/restaurants.jsx";
+import Restaurants from "./pages/feasibility-studies/Restaurants.jsx";
 import Schools from "./pages/feasibility-studies/Schools.jsx";
 import Farms from "./pages/feasibility-studies/Farms.jsx";
 import E_commerce_projects from "./pages/feasibility-studies/E-commerce-projects.jsx";
@@ -31,19 +33,39 @@ import Emails from "./pages/Emails.jsx";
 import Signin from "./pages/Signin.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
+// Components
 import Mobile_nav from "./components/mobile_nav.jsx";
 import Dialog from "./components/Dialog.jsx";
 import Edit from "./components/Edit.jsx";
-import { useEffect, useState,useLayoutEffect } from "react";
 
+async function isAuthenticated() {
+  const token = localStorage.getItem("token");
+  if (!token) return false;
 
-function isAuthenticated() {
-  return !!localStorage.getItem("token");
+  try {
+    const response = await axios.get("/api/protected");
+    return response.status === 200;
+  } catch (error) {
+    localStorage.removeItem("token");
+    return false;
+  }
 }
 
 function ProtectedRoute({ element }) {
   const location = useLocation();
-  return isAuthenticated() ? (
+  const [isAuth, setIsAuth] = useState(null);
+
+  useEffect(() => {
+    async function checkAuth() {
+      const auth = await isAuthenticated();
+      setIsAuth(auth);
+    }
+    checkAuth();
+  }, []);
+
+  if (isAuth === null) return null; // Loading state
+
+  return isAuth ? (
     element
   ) : (
     <Navigate to="/user/signin" state={{ from: location }} replace />
@@ -52,12 +74,14 @@ function ProtectedRoute({ element }) {
 
 function LayoutWrapper({ children }) {
   const location = useLocation();
-  const hideLayout = location.pathname.startsWith("/user/signin");
+  const hideLayout =
+    location.pathname.startsWith("/user/signin") ||
+    location.pathname === "/not-found";
 
   return (
     <>
       {!hideLayout && <Header />}
-      <ScrollToTop />
+      {!hideLayout && <ScrollToTop />}
       {children}
       {!hideLayout && <Footer />}
       {!hideLayout && <Mobile_nav />}
@@ -71,15 +95,11 @@ function AuthGate({ children }) {
   const [ready, setReady] = useState(false);
 
   useLayoutEffect(() => {
-    const token = localStorage.getItem("token");
-    // Simulate check or async call
     requestAnimationFrame(() => setReady(true));
   }, []);
 
-  if (!ready) return null; // or return a loading spinner
-  return children;
+  return ready ? children : null;
 }
-
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -87,7 +107,6 @@ createRoot(document.getElementById("root")).render(
       <AuthGate>
         <LayoutWrapper>
           <Routes>
-            {/* Protected Routes */}
             <Route path="/" element={<ProtectedRoute element={<App />} />} />
             <Route
               path="/about"
@@ -148,11 +167,9 @@ createRoot(document.getElementById("root")).render(
               element={<ProtectedRoute element={<Emails />} />}
             />
 
-            {/* Auth Route */}
             <Route path="/user/signin" element={<Signin />} />
-
-            {/* 404 */}
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<Navigate to="/not-found" replace />} />
+            <Route path="/not-found" element={<NotFound />} />
           </Routes>
         </LayoutWrapper>
       </AuthGate>
