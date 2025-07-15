@@ -12,6 +12,8 @@ export default function Header() {
   const [isEditing, setIsEditing] = useState(false);
   const editedValues = useRef({});
   const sidebarRef = useRef(null);
+  const [logoFile, setLogoFile] = useState(null);
+const [showReview, setShowReview] = useState(false);
 
   const handleInput = (e, key) => {
     editedValues.current[key] = e.target.innerText;
@@ -31,22 +33,39 @@ export default function Header() {
   };
   async function submitEditableText(data) {
     try {
-      const response = await axios.post(
-        "/menu/save",
-        data
-      );
-      console.log(response);
+      const formData = new FormData();
+
+      // Append all text fields
+      for (const key in data) {
+        formData.append(key, data[key]);
+      }
+
+      // Append logo if available
+      if (logoFile) {
+        formData.append("logo", logoFile);
+      }
+
+      const response = await axios.post("/menu/save", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response.status === 200 || response.status === 201) {
         toast.success("تم الحفظ بنجاح!");
+        // Optional: if server returns updated logo URL, update UI
+        if (response.data.logoUrl) {
+          setLogoUrl(response.data.logoUrl);
+        }
       } else {
-        throw error;
+        throw new Error("Save failed");
       }
     } catch (error) {
       toast.error("فشل في الحفظ!");
       console.log(error);
     }
   }
+
   useLayoutEffect(() => {
     getMenu();
   }, []);
@@ -356,9 +375,24 @@ export default function Header() {
         </ul>
       </nav>
 
-      <Link to="/" className="logo">
-        <img src={logo} alt="logo" />
-      </Link>
+      <div className="logo">
+        <input
+          type="file"
+          accept="image/*"
+          className="logo_input"
+          onChange={(e) => setLogoFile(e.target.files[0])}
+        />
+
+        <Link to="/">
+          <img
+            src={
+              logoFile ? URL.createObjectURL(logoFile) : menuTxt.logoUrl 
+            }
+            alt="logo"
+            id="logoimg"
+          />
+        </Link>
+      </div>
 
       <button onClick={toggleEditing} className="editbtn">
         {isEditing ? save : edit}
