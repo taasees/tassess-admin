@@ -16,6 +16,7 @@ import ScrollToTop from "./components/animation/ScrollToTop.jsx";
 import axios from "./axiosInstance.jsx";
 
 // Pages
+import Loading from "./components/loading.jsx";
 import About from "./pages/About.jsx";
 import WhyUs from "./pages/WhyUs.jsx";
 import Factories from "./pages/feasibility-studies/Factories.jsx";
@@ -103,6 +104,7 @@ function AuthGate({ children }) {
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
+      <Loading />
       <AuthGate>
         <LayoutWrapper>
           <Routes>

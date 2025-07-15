@@ -1096,6 +1096,17 @@ body .dialog.open {
 body .dialog.open .contact {
   top: 0;
 }
+body .spinner {
+  width: 100dvw;
+  height: 100dvh;
+  background: var(--body-bg-clr-gray);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-content: center;
+  z-index: 99999999999999;
+}
 
 @media (min-width: 990px) {
   .mobile_nav {

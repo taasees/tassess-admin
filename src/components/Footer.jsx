@@ -18,7 +18,13 @@ export default function Footer() {
     }),
   };
   return (
-    <footer dir="auto">
+    <motion.footer
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      dir="auto"
+    >
       <div className="desktop">
         <div className="top">
           <motion.div
@@ -105,6 +111,6 @@ export default function Footer() {
           </p>
         </div>
       </div>  */}
-    </footer>
+    </motion.footer>
   );
 }
