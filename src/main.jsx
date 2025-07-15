@@ -19,7 +19,7 @@ import axios from "./axiosInstance.jsx";
 import About from "./pages/About.jsx";
 import WhyUs from "./pages/WhyUs.jsx";
 import Factories from "./pages/feasibility-studies/Factories.jsx";
-import Restaurants from "./pages/feasibility-studies/Restaurants.jsx";
+import Restaurants from "./pages/feasibility-studies/restaurants.jsx";
 import Schools from "./pages/feasibility-studies/Schools.jsx";
 import Farms from "./pages/feasibility-studies/Farms.jsx";
 import E_commerce_projects from "./pages/feasibility-studies/E-commerce-projects.jsx";
