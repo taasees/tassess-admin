@@ -600,7 +600,7 @@ function App() {
             <input
               type="file"
               accept="video/*"
-              data-key="be_video"
+              data-keyhero="be_video"
               onChange={handleImageUpload_hero}
             />
             {videoIcon}
