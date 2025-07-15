@@ -364,7 +364,7 @@ function App() {
       if (hasEmptyFields) return;
 
       setTextValues(newValues);
-      console.log("Saved Values:", newValues);
+      // console.log("Saved Values:", newValues);
 
       // Call your saving function here
       saveTextContent(newValues);

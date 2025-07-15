@@ -24,19 +24,19 @@ export default function Mobile_nav() {
       document.removeEventListener("touchstart", handleClickOutside);
     };
   }, [isSideOpen]);
-  let menuTxt = {};
+   const [menuTxt, setmenuTxt] = useState({});
 
-  useEffect(() => {
-    try {
-      const savedMenu = localStorage.getItem("menuTxt");
-      if (savedMenu && savedMenu !== "undefined") {
-        menuTxt = JSON.parse(savedMenu);
-      }
-    } catch (err) {
-      console.warn("Failed to parse saved menuTxt from localStorage:", err);
-      menuTxt = {};
-    }
-  }, []);
+   useEffect(() => {
+     try {
+       const savedMenu = localStorage.getItem("menuTxt");
+       if (savedMenu && savedMenu !== "undefined") {
+         setmenuTxt(JSON.parse(savedMenu));
+       }
+     } catch (err) {
+       console.warn("Failed to parse saved menuTxt from localStorage:", err);
+       setmenuTxt({});
+     }
+   }, []);
   //  const savedMenu = localStorage.getItem("menuTxt");
   //  const menuTxt = savedMenu ? JSON.parse(savedMenu) : {};
   const home = (
