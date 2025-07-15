@@ -7,7 +7,6 @@ export default function Mobile_nav() {
   const moreServeciesRef = useRef(null);
   const toggleSidebar = () => setIsSideOpen((prev) => !prev);
 
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -25,8 +24,21 @@ export default function Mobile_nav() {
       document.removeEventListener("touchstart", handleClickOutside);
     };
   }, [isSideOpen]);
- const savedMenu = localStorage.getItem("menuTxt");
- const menuTxt = savedMenu ? JSON.parse(savedMenu) : {};
+  let menuTxt = {};
+
+  useEffect(() => {
+    try {
+      const savedMenu = localStorage.getItem("menuTxt");
+      if (savedMenu && savedMenu !== "undefined") {
+        menuTxt = JSON.parse(savedMenu);
+      }
+    } catch (err) {
+      console.warn("Failed to parse saved menuTxt from localStorage:", err);
+      menuTxt = {};
+    }
+  }, []);
+  //  const savedMenu = localStorage.getItem("menuTxt");
+  //  const menuTxt = savedMenu ? JSON.parse(savedMenu) : {};
   const home = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -183,7 +195,6 @@ export default function Mobile_nav() {
         ref={moreServeciesRef}
         className={`moreServecies ${isSideOpen ? "show" : "hide"}`}
       >
-      
         <ul>
           <li>
             <Link onClick={toggleSidebar} to={"/feasibility-studies"}>
