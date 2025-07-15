@@ -13,7 +13,7 @@ export default function Header() {
   const editedValues = useRef({});
   const sidebarRef = useRef(null);
   const [logoFile, setLogoFile] = useState(null);
-const [showReview, setShowReview] = useState(false);
+  const [showReview, setShowReview] = useState(false);
 
   const handleInput = (e, key) => {
     editedValues.current[key] = e.target.innerText;
@@ -376,18 +376,18 @@ const [showReview, setShowReview] = useState(false);
       </nav>
 
       <div className="logo">
-        <input
-          type="file"
-          accept="image/*"
-          className="logo_input"
-          onChange={(e) => setLogoFile(e.target.files[0])}
-        />
+        {isEditing && (
+          <input
+            type="file"
+            accept="image/*"
+            className="logo_input"
+            onChange={(e) => setLogoFile(e.target.files[0])}
+          />
+        )}
 
         <Link to="/">
           <img
-            src={
-              logoFile ? URL.createObjectURL(logoFile) : menuTxt.logoUrl 
-            }
+            src={logoFile ? URL.createObjectURL(logoFile) : menuTxt.logoUrl}
             alt="logo"
             id="logoimg"
           />

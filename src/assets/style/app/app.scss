@@ -355,7 +355,6 @@ body {
             display: grid;
             place-content: center;
             border-radius: var(--border-radius);
-            cursor: pointer;
             svg {
               fill: var(--light-svg-clr);
             }
@@ -365,6 +364,8 @@ body {
               height: 100%;
               opacity: 0;
               cursor: pointer;
+              z-index: 10;
+              top: 0;
             }
           }
           .upload-img {
@@ -376,15 +377,16 @@ body {
             display: grid;
             place-content: center;
             border-radius: var(--border-radius);
-            cursor: pointer;
             svg {
               fill: var(--light-svg-clr);
             }
             input {
               position: absolute;
+              top: 0;
               width: 100%;
               height: 100%;
               opacity: 0;
+              z-index: 10;
               cursor: pointer;
             }
           }

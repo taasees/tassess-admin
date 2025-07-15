@@ -283,14 +283,7 @@ function App() {
       }
     });
   }, []);
-  // useEffect(() => {
-  //   const video = document.getElementById("hero-video");
-  //   if (video) {
-  //     video.play().catch((err) => {
-  //       console.warn("Autoplay failed:", err);
-  //     });
-  //   }
-  // }, []);
+
   const [isVideoVisible, setIsVideoVisible] = useState(false);
   const videoRef = useRef(null);
 
@@ -364,9 +357,7 @@ function App() {
       if (hasEmptyFields) return;
 
       setTextValues(newValues);
-      // console.log("Saved Values:", newValues);
 
-      // Call your saving function here
       saveTextContent(newValues);
     }
 
@@ -507,7 +498,6 @@ function App() {
           <SwiperSlide>
             <div className="swipe-image">
               <motion.div
-              
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
@@ -597,12 +587,14 @@ function App() {
         </div>
         <div className="actions">
           <button>
-            <input
-              type="file"
-              accept="video/*"
-              data-keyhero="be_video"
-              onChange={handleImageUpload_hero}
-            />
+            {isEditing_hero && (
+              <input
+                type="file"
+                accept="video/*"
+                data-keyhero="be_video"
+                onChange={handleImageUpload_hero}
+              />
+            )}
             {videoIcon}
           </button>
           <button onClick={toggleEditing_hero}>
@@ -724,21 +716,25 @@ function App() {
             <div className="actions">
               <div className="upload-video">
                 {videoIcon}
-                <input
-                  type="file"
-                  accept="video/*"
-                  data-key="video"
-                  onChange={handleVideoUpload}
-                />
+                {isEditing && (
+                  <input
+                    type="file"
+                    accept="video/*"
+                    data-key="video"
+                    onChange={handleVideoUpload}
+                  />
+                )}
               </div>
               <div className="upload-img">
                 {imgicon}
-                <input
-                  type="file"
-                  accept="image/*"
-                  data-key="thumbnail"
-                  onChange={handleImageUpload}
-                />
+                {isEditing && (
+                  <input
+                    type="file"
+                    accept="image/*"
+                    data-key="thumbnail"
+                    onChange={handleImageUpload}
+                  />
+                )}
               </div>
             </div>
 
