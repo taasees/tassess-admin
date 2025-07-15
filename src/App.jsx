@@ -507,8 +507,7 @@ function App() {
           <SwiperSlide>
             <div className="swipe-image">
               <motion.div
-                // key={index}
-                // custom={index}
+              
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}

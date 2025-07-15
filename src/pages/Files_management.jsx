@@ -128,9 +128,13 @@ export default function Files_management() {
     formData.append("img", slide.imgFile); // Original file object
     formData.append("category", lastSegment);
 
-    const response = await axios.post("/slides", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const response = await axios.post(
+      "/slides",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
 
     // Return the saved slide from server response, which should include _id
     return response.data;
@@ -151,7 +155,9 @@ export default function Files_management() {
   };
   const fetchSlidesByCategory = async (category) => {
     try {
-      const response = await axios.get(`/slides/category/${category}`);
+      const response = await axios.get(
+        `/slides/category/${category}`
+      );
       return response.data; // slides array
     } catch (err) {
       console.error("Failed to fetch slides:", err);
@@ -181,9 +187,13 @@ export default function Files_management() {
     }
 
     try {
-      const response = await axios.put(`/slides/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.put(
+        `/slides/${id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       // Update state with latest server data
       const updated = response.data;
