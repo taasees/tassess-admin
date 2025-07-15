@@ -5,7 +5,7 @@ import paperwork from "../assets/images/paperwork.jpg";
 
 import "../assets/style/common/aboutPages.css";
 import AnimatedContent from "../components/AnimatedContent";
-import axios from "axios";
+import axios from "../axiosInstance";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
@@ -15,7 +15,7 @@ export default function Emails() {
 
   useEffect(() => {
     axios
-      .get("https://shark-consulting-net.onrender.com/email/get")
+      .get("/email/get")
       .then((response) => {
         setEmails(response.data);
       })

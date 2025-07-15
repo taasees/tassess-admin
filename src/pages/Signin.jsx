@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../axiosInstance";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import "../assets/style/signin/signin.css";
@@ -55,13 +55,13 @@ export default function Signin() {
 
     try {
       const response = await axios.post(
-        "https://shark-consulting-net.onrender.com/user/signin",
+        "/user/signin",
+        // "http://localhost:5005/user/signin",
         {
           username: formData.name,
           password: formData.password,
         }
       );
-      console.log(response);
       if (response.data.success) {
         toast.success("تم تسجيل الدخول بنجاح");
         localStorage.setItem("token", response.data.token);

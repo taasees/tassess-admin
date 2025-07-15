@@ -6,7 +6,7 @@ import paperwork from "../../assets/images/paperwork.jpg";
 import "../../assets/style/common/feasibility-studies.css";
 import AnimatedContent from "../../components/AnimatedContent";
 
-import axios from "axios";
+import axios from "../../axiosInstance";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -131,7 +131,7 @@ export default function Restaurants() {
     formData.append("category", lastSegment);
 
     const response = await axios.post(
-      "https://shark-consulting-net.onrender.com/slides",
+      "/slides",
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -145,7 +145,7 @@ export default function Restaurants() {
   const deleteCustomSlide = async (id) => {
     try {
       // Call backend to delete by id
-      await axios.delete(`https://shark-consulting-net.onrender.com/slides/${id}`);
+      await axios.delete(`/slides/${id}`);
 
       // Remove from state
       setCustomSlides((prev) => prev.filter((slide) => slide._id !== id));
@@ -158,7 +158,7 @@ export default function Restaurants() {
   const fetchSlidesByCategory = async (category) => {
     try {
       const response = await axios.get(
-        `https://shark-consulting-net.onrender.com/slides/category/${category}`
+        `/slides/category/${category}`
       );
       return response.data; // slides array
     } catch (err) {
@@ -190,7 +190,7 @@ export default function Restaurants() {
 
     try {
       const response = await axios.put(
-        `https://shark-consulting-net.onrender.com/slides/${id}`,
+        `/slides/${id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

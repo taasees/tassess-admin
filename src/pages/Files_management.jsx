@@ -6,7 +6,7 @@ import paperwork from "../assets/images/paperwork.jpg";
 import "../assets/style/common/feasibility-studies.css";
 import AnimatedContent from "../components/AnimatedContent";
 import { motion } from "framer-motion";
-import axios from "axios";
+import axios from "../axiosInstance";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function Files_management() {
@@ -128,13 +128,9 @@ export default function Files_management() {
     formData.append("img", slide.imgFile); // Original file object
     formData.append("category", lastSegment);
 
-    const response = await axios.post(
-      "https://shark-consulting-net.onrender.com/slides",
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    const response = await axios.post("/slides", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
     // Return the saved slide from server response, which should include _id
     return response.data;
@@ -143,7 +139,7 @@ export default function Files_management() {
   const deleteCustomSlide = async (id) => {
     try {
       // Call backend to delete by id
-      await axios.delete(`https://shark-consulting-net.onrender.com/slides/${id}`);
+      await axios.delete(`/slides/${id}`);
 
       // Remove from state
       setCustomSlides((prev) => prev.filter((slide) => slide._id !== id));
@@ -155,9 +151,7 @@ export default function Files_management() {
   };
   const fetchSlidesByCategory = async (category) => {
     try {
-      const response = await axios.get(
-        `https://shark-consulting-net.onrender.com/slides/category/${category}`
-      );
+      const response = await axios.get(`/slides/category/${category}`);
       return response.data; // slides array
     } catch (err) {
       console.error("Failed to fetch slides:", err);
@@ -187,13 +181,9 @@ export default function Files_management() {
     }
 
     try {
-      const response = await axios.put(
-        `https://shark-consulting-net.onrender.com/slides/${id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await axios.put(`/slides/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       // Update state with latest server data
       const updated = response.data;

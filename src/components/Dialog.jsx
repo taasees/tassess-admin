@@ -3,7 +3,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import axios from "../axiosInstance";
 import { isValidPhoneNumber } from "libphonenumber-js";
 
 export default function Dialog() {
@@ -67,7 +67,7 @@ export default function Dialog() {
 
     try {
       const response = await axios.post(
-        "https://shark-consulting-net.onrender.com/email/send",
+        "/email/send",
         formData
       );
       toast.success("تم إرسال البيانات بنجاح");

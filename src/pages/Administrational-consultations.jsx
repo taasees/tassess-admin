@@ -7,7 +7,7 @@ import "../assets/style/common/feasibility-studies.css";
 import AnimatedContent from "../components/AnimatedContent";
 import { motion } from "framer-motion";
 
-import axios from "axios";
+import axios from "../axiosInstance";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -131,7 +131,7 @@ export default function Administrational_consultations() {
     formData.append("category", lastSegment);
 
     const response = await axios.post(
-      "https://shark-consulting-net.onrender.com/slides",
+      "/slides",
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -146,7 +146,7 @@ export default function Administrational_consultations() {
     try {
       // Call backend to delete by id
       await axios.delete(
-        `https://shark-consulting-net.onrender.com/slides/${id}`
+        `/slides/${id}`
       );
 
       // Remove from state
@@ -160,7 +160,7 @@ export default function Administrational_consultations() {
   const fetchSlidesByCategory = async (category) => {
     try {
       const response = await axios.get(
-        `https://shark-consulting-net.onrender.com/slides/category/${category}`
+        `/slides/category/${category}`
       );
       return response.data; // slides array
     } catch (err) {
@@ -192,7 +192,7 @@ export default function Administrational_consultations() {
 
     try {
       const response = await axios.put(
-        `https://shark-consulting-net.onrender.com/slides/${id}`,
+        `/slides/${id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

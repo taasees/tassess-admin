@@ -2,8 +2,8 @@ import { React, useState, useEffect, useRef, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
 import "../assets/style/header/header.css";
 import logo from "../assets/images/Logo_1.webp";
-import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
+import { toast } from "react-toastify";
+import axios from "../axiosInstance";
 export default function Header() {
   const [isSideOpen, setIsSideOpen] = useState(false);
   const [menuTxt, setmenuTxt] = useState({});
@@ -32,7 +32,7 @@ export default function Header() {
   async function submitEditableText(data) {
     try {
       const response = await axios.post(
-        "http://localhost:5005/menu/save",
+        "/menu/save",
         data
       );
       console.log(response);
@@ -52,10 +52,11 @@ export default function Header() {
   }, []);
   async function getMenu() {
     try {
-      const response = await axios.get("http://localhost:5005/menu/");
+      const response = await axios.get("/menu");
 
       if (response.status === 200 || response.status === 201) {
         setmenuTxt((prev) => (prev = response.data.menu));
+        localStorage.setItem("menuTxt", JSON.stringify(response.data.menu));
       } else {
         throw error;
       }
@@ -358,9 +359,11 @@ export default function Header() {
       <Link to="/" className="logo">
         <img src={logo} alt="logo" />
       </Link>
+
       <button onClick={toggleEditing} className="editbtn">
         {isEditing ? save : edit}
       </button>
+
       <div
         className="menu open"
         onClick={toggleSidebar}
@@ -389,7 +392,6 @@ export default function Header() {
               <li>
                 <Link to="/">الرئيسية</Link>
               </li>
-
               <div
                 className={`details ${openDetail === "about" ? "active" : ""}`}
                 onClick={() => toggleDetails("about")}
@@ -409,7 +411,6 @@ export default function Header() {
                   </ul>
                 </div>
               </div>
-
               <div
                 className={`details ${
                   openDetail === "feasibility" ? "active" : ""
@@ -446,7 +447,6 @@ export default function Header() {
                   </ul>
                 </div>
               </div>
-
               <li>
                 <Link to="/Administrational-consultations">
                   {menuTxt.adminConsult}

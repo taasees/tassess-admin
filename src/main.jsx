@@ -13,7 +13,7 @@ import {
   useRoutes,
 } from "react-router-dom";
 import ScrollToTop from "./components/animation/ScrollToTop.jsx";
-import axios from "axios";
+import axios from "./axiosInstance.jsx";
 
 // Pages
 import About from "./pages/About.jsx";
@@ -55,7 +55,7 @@ function ProtectedRoute({ element }) {
   const location = useLocation();
   const [isAuth, setIsAuth] = useState(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     async function checkAuth() {
       const auth = await isAuthenticated();
       setIsAuth(auth);
@@ -64,7 +64,6 @@ function ProtectedRoute({ element }) {
   }, []);
 
   if (isAuth === null) return null; // Loading state
-
   return isAuth ? (
     element
   ) : (

@@ -6,17 +6,8 @@ export default function Mobile_nav() {
   const [isSideOpen, setIsSideOpen] = useState(false);
   const moreServeciesRef = useRef(null);
   const toggleSidebar = () => setIsSideOpen((prev) => !prev);
-  const [showMoreServices, setShowMoreServices] = useState(false);
 
-  function openDialog() {
-    const dialog = document.querySelector(".dialog");
-    if (dialog) {
-      dialog.style.display = "flex"; // make visible first
-      setTimeout(() => {
-        dialog.classList.add("open"); // trigger opacity animation
-      }, 10); // slight delay to allow reflow
-    }
-  }
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -34,7 +25,8 @@ export default function Mobile_nav() {
       document.removeEventListener("touchstart", handleClickOutside);
     };
   }, [isSideOpen]);
-
+ const savedMenu = localStorage.getItem("menuTxt");
+ const menuTxt = savedMenu ? JSON.parse(savedMenu) : {};
   const home = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -161,7 +153,7 @@ export default function Mobile_nav() {
       <ul>
         <Link to={"/"}>
           <span>{home}</span>
-          <p>الرئيسية</p>
+          <p>{menuTxt.home}</p>
         </Link>
         <li className="open-moreServecies" onClick={toggleSidebar}>
           <span>{services}</span>
@@ -175,7 +167,7 @@ export default function Mobile_nav() {
         </Link>
         <Link to="/contact-request">
           <span>{chat}</span>
-          <p>طابات التواصل</p>
+          <p>{menuTxt.contact}</p>
         </Link>
         <Link
           to="https://wa.me/97455225488?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%D9%83%D9%85"
@@ -184,22 +176,18 @@ export default function Mobile_nav() {
           onClick={toggleSidebar}
         >
           <span>{whatsApp}</span>
-          <p>WhatsApp</p>
+          <p>{menuTxt.whatsapp}</p>
         </Link>
       </ul>
       <div
         ref={moreServeciesRef}
         className={`moreServecies ${isSideOpen ? "show" : "hide"}`}
       >
-        {/* <div className="top">
-          <span className="close-moreServecies" onClick={toggleSidebar}>
-            {close}
-          </span>
-        </div> */}
+      
         <ul>
           <li>
             <Link onClick={toggleSidebar} to={"/feasibility-studies"}>
-              دراسات الجدوى
+              {menuTxt.studies}
             </Link>
             <span>{clipboard}</span>
           </li>
@@ -208,13 +196,13 @@ export default function Mobile_nav() {
               onClick={toggleSidebar}
               to={"/Administrational-consultations"}
             >
-              إستشارات إدارية
+              {menuTxt.adminConsult}
             </Link>
             <span>{briefcase}</span>
           </li>
           <li>
             <Link onClick={toggleSidebar} to={"/files-management"}>
-              إدارة الملفات
+              {menuTxt.filesMgmt}
             </Link>
             <span>{folder}</span>
           </li>

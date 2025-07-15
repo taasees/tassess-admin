@@ -113,8 +113,9 @@
 
 footer {
   position: relative;
-  bottom: 0;
+  bottom: 0 !important;
   width: 100%;
+  right: 0;
 }
 footer .desktop {
   position: relative;

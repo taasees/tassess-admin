@@ -26,7 +26,8 @@ import administrational_consultations from "./assets/videos/administrational_con
 import files_management from "./assets/videos/files_management.mp4";
 
 import { motion } from "framer-motion";
-import axios from "axios";
+import axios from "./axiosInstance.jsx";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -63,24 +64,95 @@ function App() {
     </svg>
   );
   const [Hero, setHero] = useState({
-    slide1_title: "أطلق إمكانيات شركتك بأفضل الحلول الإدارية",
-    slide1_desc:
-      "متخصصون في الإستشارات الإدارية لجميع المشاريع داخل دول مجلس التعاون الخليجي",
-    slide2_title: "لأن نجاح شركتك يبدأ بقرارات مدروسة",
-    slide2_desc:
-      "متخصصون في الإستشارات الإدارية لجميع المشاريع داخل دول مجلس التعاون الخليجي",
-    slide3_title: "إضمن الآن أفضل قرار استثماري لشركتك",
-    slide3_desc:
-      "متخصصون في الإستشارات الإدارية لجميع المشاريع داخل دول مجلس التعاون الخليجي",
+    slide1_title: "",
+    slide1_desc: "",
+    slide2_title: "",
+    slide2_desc: "",
+    slide3_title: "",
+    slide3_desc: "",
+    bg_video: "",
   });
+  const [isEditing_hero, setIsEditing_hero] = useState(false);
+  const [bg_video, setbg_video] = useState(null);
+  const [bg_videoupload, setbg_videoupload] = useState(null);
+  const toggleEditing_hero = () => {
+    if (isEditing_hero) {
+      const editedElements = document.querySelectorAll("[data-keyhero]");
+      const newValues = { ...Hero };
+      let hasEmptyFields = false;
 
-  const handleEdit = (key, value) => {
-    setHero((prev) => {
-      const updated = { ...prev, [key]: value };
-      console.log("Edited Content:", updated);
-      return updated;
-    });
+      editedElements.forEach((el) => {
+        const key = el.getAttribute("data-keyhero");
+        const value = el.textContent.trim();
+
+        // Skip checking non-text fields (like video or thumbnail)
+        if (!value && key !== "bg_video") {
+          toast.error(`الحقل "${key}" لا يمكن أن يكون فارغًا`);
+          hasEmptyFields = true;
+        } else {
+          newValues[key] = value;
+        }
+      });
+
+      if (hasEmptyFields) return;
+
+      // setTextValues(newValues);
+      console.log("Saved Values:", newValues);
+
+      // Call your saving function here
+      const saveTextContent_hero = async (textValues) => {
+        try {
+          const formData = new FormData();
+
+          for (const key in textValues) {
+            formData.append(key, textValues[key]);
+          }
+
+          if (bg_videoupload) {
+            formData.append("bg_video", bg_videoupload); // same name as multer expects
+          }
+          // console.log(bg_videoupload);
+          const response = await axios.post("/hero", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          if (response.status === 200 || response.status == 201)
+            return toast.success("تم حفظ البيانات بنجاح ");
+        } catch (error) {
+          console.error("Error saving text content:", error);
+          toast.error("حدث خطأ أثناء الحفظ");
+        }
+      };
+      saveTextContent_hero(newValues);
+    }
+    // Toggle editing state
+    setIsEditing_hero((prev) => !prev);
   };
+  const handleImageUpload_hero = (e) => {
+    const file = e.target.files[0];
+
+    if (file && file.type.startsWith("video/")) {
+      const videoURL = URL.createObjectURL(file);
+      setbg_video(videoURL);
+      setbg_videoupload(file);
+
+      // Wait for React to update the DOM
+      setTimeout(() => {
+        const videoEl = document.getElementById("bg_video");
+        if (videoEl) {
+          videoEl.load(); // Reload the new source
+          videoEl.play().catch((err) => {
+            console.error("Auto-play failed:", err);
+          });
+        }
+      }, 100);
+    } else {
+      alert("Please select a valid video file.");
+    }
+  };
+
   const add = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -149,15 +221,9 @@ function App() {
     let response;
     if (about._id && about._id.toString().length !== 13) {
       // existing (assumption: tempId is timestamp 13 chars)
-      response = await axios.put(
-        `https://shark-consulting-net.onrender.com/question/${about._id}`,
-        about
-      );
+      response = await axios.put(`/question/${about._id}`, about);
     } else {
-      response = await axios.post(
-        `https://shark-consulting-net.onrender.com/question`,
-        about
-      );
+      response = await axios.post(`/question`, about);
     }
 
     return response.data;
@@ -171,9 +237,7 @@ function App() {
       return;
     }
     try {
-      await axios.delete(
-        `https://shark-consulting-net.onrender.com/question/${id}`
-      );
+      await axios.delete(`/question/${id}`);
       setAboutCards((prev) => prev.filter((_, i) => i !== index));
       toast.success("تم حذف البيانات بنجاح!");
     } catch (err) {
@@ -201,9 +265,7 @@ function App() {
 
   const fetchAboutByCategory = async () => {
     try {
-      const response = await axios.get(
-        `https://shark-consulting-net.onrender.com/question`
-      );
+      const response = await axios.get(`/question`);
       return response.data; // expecting array of about cards
     } catch (err) {
       console.error("Failed to fetch about data:", err);
@@ -221,14 +283,14 @@ function App() {
       }
     });
   }, []);
-  useEffect(() => {
-    const video = document.getElementById("hero-video");
-    if (video) {
-      video.play().catch((err) => {
-        console.warn("Autoplay failed:", err);
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   const video = document.getElementById("hero-video");
+  //   if (video) {
+  //     video.play().catch((err) => {
+  //       console.warn("Autoplay failed:", err);
+  //     });
+  //   }
+  // }, []);
   const [isVideoVisible, setIsVideoVisible] = useState(false);
   const videoRef = useRef(null);
 
@@ -260,6 +322,167 @@ function App() {
       },
     }),
   };
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [uploaded, setuploaded] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [thumbnail, setthumbnail] = useState(null);
+  const [thumbnailupload, setthumbnailupload] = useState(null);
+
+  const [textValues, setTextValues] = useState({
+    headerTitle: "",
+    headerDesc: "",
+    card1Title: "",
+    card1Desc: "",
+    card2Title: "",
+    card2Desc: "",
+    card3Title: "",
+    card3Desc: "",
+    video: uploadedFile,
+    thumbnail: thumbnailupload,
+  });
+
+  const toggleEditing = () => {
+    if (isEditing) {
+      const editedElements = document.querySelectorAll("[data-key]");
+      const newValues = { ...textValues };
+      let hasEmptyFields = false;
+
+      editedElements.forEach((el) => {
+        const key = el.getAttribute("data-key");
+        const value = el.textContent.trim();
+
+        // Skip checking non-text fields (like video or thumbnail)
+        if (!value && key !== "video" && key !== "thumbnail") {
+          toast.error(`الحقل "${key}" لا يمكن أن يكون فارغًا`);
+          hasEmptyFields = true;
+        } else {
+          newValues[key] = value;
+        }
+      });
+
+      if (hasEmptyFields) return;
+
+      setTextValues(newValues);
+      console.log("Saved Values:", newValues);
+
+      // Call your saving function here
+      saveTextContent(newValues);
+    }
+
+    // Toggle editing state
+    setIsEditing((prev) => !prev);
+  };
+
+  const saveTextContent = async (textValues) => {
+    try {
+      const formData = new FormData();
+
+      for (const key in textValues) {
+        formData.append(key, textValues[key]);
+      }
+
+      if (uploadedFile) {
+        formData.append("video", uploadedFile); // same name as multer expects
+      }
+      if (thumbnailupload) {
+        formData.append("thumbnail", thumbnailupload);
+      }
+      const response = await axios.post("/textContent", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200)
+        return toast.success("تم حفظ البيانات بنجاح ");
+    } catch (error) {
+      console.error("Error saving text content:", error);
+      toast.error("حدث خطأ أثناء الحفظ");
+    }
+  };
+
+  const handleLinkClick = (e) => {
+    if (isEditing) {
+      e.preventDefault();
+    }
+  };
+
+  const handleVideoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setuploaded(URL.createObjectURL(file)); // For preview
+      setUploadedFile(file); // For upload
+    }
+  };
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setthumbnail(URL.createObjectURL(file)); // For preview
+      setthumbnailupload(file); // For upload
+    }
+  };
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [content, setContent] = useState({});
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await axios.get("/textContent");
+        setContent(response.data.data);
+        const response2 = await axios.get("/hero");
+        setHero(response2.data.data);
+
+        setError(null);
+      } catch (err) {
+        setError(err.response?.data?.error || err.message);
+        setContent(null);
+      } finally {
+        setLoading(false);
+        setTimeout(() => {
+          const videoEl = document.getElementById("bg_video");
+          if (videoEl) {
+            videoEl.load(); // Reload the new source
+            const onLoadedData = () => {
+              videoEl.play().catch((err) => {
+                console.error("Auto-play failed:", err);
+              });
+              videoEl.removeEventListener("loadeddata", onLoadedData);
+            };
+            videoEl.addEventListener("loadeddata", onLoadedData);
+          }
+        }, 500);
+      }
+    };
+
+    fetchContent();
+  }, []);
+
+  const videoIcon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      fill="#FFFFFF"
+    >
+      <path d="M360-320h80v-120h120v-80H440v-120h-80v120H240v80h120v120ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h480q33 0 56.5 23.5T720-720v180l160-160v440L720-420v180q0 33-23.5 56.5T640-160H160Zm0-80h480v-480H160v480Zm0 0v-480 480Z" />
+    </svg>
+  );
+  const imgicon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      fill="#FFFFFF"
+    >
+      <path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-320h80v320q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z" />
+    </svg>
+  );
+
   return (
     <motion.div
       className="container"
@@ -283,29 +506,32 @@ function App() {
           {/* Slide 1 */}
           <SwiperSlide>
             <div className="swipe-image">
-              <AnimatedContent delay={0.2} duration={1.2}>
-                <div className="text">
-                  <h2
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={(e) =>
-                      handleEdit("slide1_title", e.target.innerText)
-                    }
-                  >
-                    {Hero.slide1_title}
-                  </h2>
-                  <p
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={(e) =>
-                      handleEdit("slide1_desc", e.target.innerText)
-                    }
-                  >
-                    {Hero.slide1_desc}
-                  </p>
-                  {/* <Link to={""}>اطلب الخدمة</Link> */}
-                </div>
-              </AnimatedContent>
+              <motion.div
+                // key={index}
+                // custom={index}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={cardVariants}
+                className="text"
+              >
+                <h2
+                  contentEditable={isEditing_hero}
+                  suppressContentEditableWarning={true}
+                  data-keyhero="slide1_title"
+                >
+                  {Hero.slide1_title || ""}
+                </h2>
+                <p
+                  contentEditable={isEditing_hero}
+                  suppressContentEditableWarning={true}
+                  data-keyhero="slide1_desc"
+                >
+                  {Hero.slide1_desc || ""}
+                </p>
+                {/* <Link to={""}>اطلب الخدمة</Link> */}
+              </motion.div>
+
               <div className="img">
                 <img src={img1} alt="" />
               </div>
@@ -317,18 +543,18 @@ function App() {
             <div className="swipe-image">
               <div className="text">
                 <h2
-                  contentEditable
-                  suppressContentEditableWarning
-                  onBlur={(e) => handleEdit("slide2_title", e.target.innerText)}
+                  contentEditable={isEditing_hero}
+                  suppressContentEditableWarning={true}
+                  data-keyhero="slide2_title"
                 >
-                  {Hero.slide2_title}
+                  {Hero.slide2_title || ""}
                 </h2>
                 <p
-                  contentEditable
-                  suppressContentEditableWarning
-                  onBlur={(e) => handleEdit("slide2_desc", e.target.innerText)}
+                  contentEditable={isEditing_hero}
+                  suppressContentEditableWarning={true}
+                  data-keyhero="slide2_desc"
                 >
-                  {Hero.slide2_desc}
+                  {Hero.slide2_desc || ""}
                 </p>
                 {/* <Link to={""}>اطلب الخدمة</Link> */}
               </div>
@@ -343,18 +569,18 @@ function App() {
             <div className="swipe-image">
               <div className="text">
                 <h2
-                  contentEditable
-                  suppressContentEditableWarning
-                  onBlur={(e) => handleEdit("slide3_title", e.target.innerText)}
+                  contentEditable={isEditing_hero}
+                  suppressContentEditableWarning={true}
+                  data-keyhero="slide3_title"
                 >
-                  {Hero.slide3_title}
+                  {Hero.slide3_title || ""}
                 </h2>
                 <p
-                  contentEditable
-                  suppressContentEditableWarning
-                  onBlur={(e) => handleEdit("slide3_desc", e.target.innerText)}
+                  contentEditable={isEditing_hero}
+                  suppressContentEditableWarning={true}
+                  data-keyhero="slide3_desc"
                 >
-                  {Hero.slide3_desc}
+                  {Hero.slide3_desc || ""}
                 </p>
                 {/* <Link to={""}>اطلب الخدمة</Link> */}
               </div>
@@ -366,66 +592,163 @@ function App() {
         </Swiper>
 
         <div className="bg-video">
-          <video autoPlay loop muted playsInline controls={false}>
-            <source src={heroVideo} />
+          <video autoPlay loop muted playsInline controls={false} id="bg_video">
+            <source src={bg_video || Hero?.bg_videoUrl} />
           </video>
+        </div>
+        <div className="actions">
+          <button>
+            <input
+              type="file"
+              accept="video/*"
+              data-key="be_video"
+              onChange={handleImageUpload_hero}
+            />
+            {videoIcon}
+          </button>
+          <button onClick={toggleEditing_hero}>
+            {isEditing_hero ? "حفظ" : "تفعيل"}
+          </button>
         </div>
       </main>
       <section>
         <header className="section-header">
-          <h1>نحن نقدم إستشارات إدارية ودراسات جدوى</h1>
-          <p>
-            بدأنا في 2010 ومستمرين في تقديم خدماتنا المميزة بافضل الأسعار في دول
-            مجلس التعاون الخليجي
+          <h1
+            contentEditable={isEditing}
+            suppressContentEditableWarning={true}
+            data-key="headerTitle"
+          >
+            {content?.headerTitle || textValues.headerTitle || ""}
+          </h1>
+          <p
+            contentEditable={isEditing}
+            suppressContentEditableWarning={true}
+            data-key="headerDesc"
+          >
+            {content?.headerDesc || textValues.headerDesc || ""}
           </p>
         </header>
+
         <AnimatedContent delay={0.2} duration={1.2}>
-          <Link to={"/feasibility-studies"} className="card">
+          <Link
+            to={"/feasibility-studies"}
+            className="card"
+            onClick={handleLinkClick}
+          >
             <div className="card-video">
-              <video autoPlay={true} loop muted playsInline controls={false}>
+              <video autoPlay loop muted playsInline controls={false}>
                 <source src={feasibility_studies} />
               </video>
             </div>
             <div className="text">
-              <h1>دراسات الجدوى</h1>
-              <p>نقدم خدمات دراسات الجدوى لجميع المشروعات داخل الخليج</p>
+              <h1
+                contentEditable={isEditing}
+                suppressContentEditableWarning={true}
+                data-key="card1Title"
+              >
+                {content?.card1Title || ""}
+              </h1>
+              <p
+                contentEditable={isEditing}
+                suppressContentEditableWarning={true}
+                data-key="card1Desc"
+              >
+                {content?.card1Desc || ""}
+              </p>
             </div>
           </Link>
         </AnimatedContent>
+
         <AnimatedContent delay={0.2} duration={1.2}>
-          <Link to={"/Administrational-consultations"} className="card">
+          <Link
+            to={"/Administrational-consultations"}
+            className="card"
+            onClick={handleLinkClick}
+          >
             <div className="card-video">
-              <video autoPlay={true} loop muted playsInline controls={false}>
+              <video autoPlay loop muted playsInline controls={false}>
                 <source src={administrational_consultations} />
               </video>
             </div>
             <div className="text">
-              <h1>إستشارات إدارية</h1>
-              <p>نقوم بإدارة الملفات الخاصة بجميع المعاملات داخل الخليج</p>
+              <h1
+                contentEditable={isEditing}
+                suppressContentEditableWarning={true}
+                data-key="card2Title"
+              >
+                {content?.card2Title || ""}
+              </h1>
+              <p
+                contentEditable={isEditing}
+                suppressContentEditableWarning={true}
+                data-key="card2Desc"
+              >
+                {content?.card2Desc || ""}
+              </p>
             </div>
           </Link>
         </AnimatedContent>
+
         <AnimatedContent delay={0.2} duration={1.2}>
-          <Link to={"/files-management"} className="card">
+          <Link
+            to={"/files-management"}
+            className="card"
+            onClick={handleLinkClick}
+          >
             <div className="card-video">
-              <video autoPlay={true} loop muted playsInline controls={false}>
+              <video autoPlay loop muted playsInline controls={false}>
                 <source src={files_management} />
               </video>
             </div>
             <div className="text">
-              <h1>إدارة الملفات</h1>
-              <p>نقوم بإدارة الملفات الخاصة بجميع المعاملات داخل الخليج</p>
+              <h1
+                contentEditable={isEditing}
+                suppressContentEditableWarning={true}
+                data-key="card3Title"
+              >
+                {content?.card3Title || ""}
+              </h1>
+              <p
+                contentEditable={isEditing}
+                suppressContentEditableWarning={true}
+                data-key="card3Desc"
+              >
+                {content?.card3Desc || ""}
+              </p>
             </div>
           </Link>
         </AnimatedContent>
+
         <AnimatedContent delay={0.2} duration={1.2}>
-          <div className="thoumbnail">
-            <img src={video_img} alt="" />
-            <div className="playbutton" to="#" onClick={handlePlayClick}>
+          <div className="thumbnail">
+            <img src={thumbnail || content?.thumbnailUrl || video_img} alt="" />
+            <div className="actions">
+              <div className="upload-video">
+                {videoIcon}
+                <input
+                  type="file"
+                  accept="video/*"
+                  data-key="video"
+                  onChange={handleVideoUpload}
+                />
+              </div>
+              <div className="upload-img">
+                {imgicon}
+                <input
+                  type="file"
+                  accept="image/*"
+                  data-key="thumbnail"
+                  onChange={handleImageUpload}
+                />
+              </div>
+            </div>
+
+            <div className="playbutton" onClick={handlePlayClick}>
               <span>{playVideo}</span>
             </div>
           </div>
         </AnimatedContent>
+
         {isVideoVisible && (
           <div
             style={{
@@ -444,17 +767,16 @@ function App() {
           >
             <video
               ref={videoRef}
-              // autoPlay
               controls
-              // muted
-              // playsInline
               style={{ maxWidth: "90%", maxHeight: "90%" }}
             >
-              <source src={sharek} type="video/mp4" />
+              <source
+                src={uploaded || content.videoUrl || sharek}
+                type="video/mp4"
+              />
               Your browser does not support the video tag.
             </video>
 
-            {/* Close button */}
             <button
               onClick={closeVideo}
               style={{
@@ -472,7 +794,13 @@ function App() {
             </button>
           </div>
         )}
+        <div className="btn">
+          <button onClick={toggleEditing} style={{ marginBottom: "1rem" }}>
+            {isEditing ? "حفظ التعديل" : "تفعيل"}
+          </button>
+        </div>
       </section>
+
       {/* <div className="count">
         <AnimatedContent threshold={0.5} delay={0.2} duration={1.2}>
           <div className="numbers">
@@ -632,7 +960,6 @@ function App() {
           </SwiperSlide>
         </Swiper>
       </div>
-
       <div className="paperwork">
         <img src={paperwork} alt="" />
         <AnimatedContent threshold={0.3} delay={0.2} duration={1.2}>
@@ -745,7 +1072,6 @@ function App() {
           </motion.div>
         ))}
       </div>
-
       <ToastContainer
         position="bottom-left"
         autoClose={5000}

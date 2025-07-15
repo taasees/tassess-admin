@@ -1,9 +1,9 @@
 @import "../settings";
 footer {
   position: relative;
-  bottom: 0;
+  bottom: 0 !important;
   width: 100%;
-
+  right: 0;
   .desktop {
     position: relative;
     width: 100%;
