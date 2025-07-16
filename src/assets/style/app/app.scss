@@ -582,6 +582,34 @@ body {
         color: var(--txt-clr-light);
         text-align: center;
       }
+      > .actions {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        @include flex(center, flex-start, row, 1rem);
+        padding: 2rem;
+        z-index: 3;
+        button {
+          position: relative;
+          border: none;
+          outline: none;
+          overflow: hidden;
+          display: grid;
+          place-content: center;
+          padding: 0.5rem 1rem;
+          background: var(--primary-clr);
+          font-size: var(--font-h4);
+          color: var(--txt-clr-light);
+          font-family: var(--arabic-fm-exb);
+          input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+          }
+        }
+      }
     }
     .commonQuestion {
       width: 100%;

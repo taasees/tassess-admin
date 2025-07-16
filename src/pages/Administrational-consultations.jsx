@@ -212,6 +212,24 @@ export default function Administrational_consultations() {
       console.error("Modify error:", err);
     }
   };
+   const [menuTxt, setmenuTxt] = useState({});
+   const [paperwork, setpaperwork] = useState({});
+
+   useEffect(() => {
+     try {
+       const savedMenu = localStorage.getItem("menuTxt");
+       const savepaperwork = localStorage.getItem("paperwork");
+       if (savedMenu && savedMenu !== "undefined") {
+         setmenuTxt(JSON.parse(savedMenu));
+       }
+       if (savepaperwork && savepaperwork !== "undefined") {
+         setpaperwork(JSON.parse(savepaperwork));
+       }
+     } catch (err) {
+       console.warn("Failed to parse saved menuTxt from localStorage:", err);
+       setmenuTxt({});
+     }
+   }, []);
   return (
     <motion.div
       className="about-pages"
@@ -223,9 +241,9 @@ export default function Administrational_consultations() {
     >
       <div className="headerimg">
         <AnimatedContent delay={0.2} threshold={0} duration={2}>
-          <h1>إستشارات إدارية</h1>
+          <h1>{menuTxt.adminConsult}</h1>
         </AnimatedContent>
-        <img src={paperwork} alt="" />
+        <img src={paperwork.paperworkImage} alt="" />
       </div>
       <button onClick={() => setShowDialog(true)} className="addSlide">
         {add}

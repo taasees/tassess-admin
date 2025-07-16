@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useRef } from "react";
+import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 //improt images
 import paperwork from "../assets/images/paperwork.jpg";
@@ -14,6 +14,24 @@ import "../assets/style/common/feasibility-studies.css";
 import AnimatedContent from "../components/AnimatedContent";
 import { motion } from "framer-motion";
 export default function Feasibility_studies() {
+  const [menuTxt, setmenuTxt] = useState({});
+  const [paperwork, setpaperwork] = useState({});
+
+  useEffect(() => {
+    try {
+      const savedMenu = localStorage.getItem("menuTxt");
+      const savepaperwork = localStorage.getItem("paperwork");
+      if (savedMenu && savedMenu !== "undefined") {
+        setmenuTxt(JSON.parse(savedMenu));
+      }
+      if (savepaperwork && savepaperwork !== "undefined") {
+        setpaperwork(JSON.parse(savepaperwork));
+      }
+    } catch (err) {
+      console.warn("Failed to parse saved menuTxt from localStorage:", err);
+      setmenuTxt({});
+    }
+  }, []);
   return (
     <motion.div
       className="about-pages"
@@ -25,14 +43,16 @@ export default function Feasibility_studies() {
     >
       <div className="headerimg">
         <AnimatedContent delay={0.2} threshold={0} duration={2}>
-          <h1>دراسات الجدوى</h1>
+          <h1>{menuTxt.studies}</h1>
         </AnimatedContent>
-        <img src={paperwork} alt="" />
+        <img src={paperwork.paperworkImage} alt="" />
       </div>
       <div className="types">
         <Link to={"/factories"} className="type">
           <div className="text">
-            <h1>دراسات جدوى المصانع</h1>
+            <h1>
+              {menuTxt.studies} {menuTxt.factories}
+            </h1>
           </div>
           <div className="video">
             <video autoPlay={true} loop muted playsInline controls={false}>
@@ -42,7 +62,9 @@ export default function Feasibility_studies() {
         </Link>
         <Link to={"/farms"} className="type">
           <div className="text">
-            <h1>دراسات جودى المزارع</h1>
+            <h1>
+              {menuTxt.studies} {menuTxt.farms}
+            </h1>
           </div>
           <div className="video">
             <video autoPlay={true} loop muted playsInline controls={false}>
@@ -52,7 +74,9 @@ export default function Feasibility_studies() {
         </Link>
         <Link to={"/restaurants"} className="type">
           <div className="text">
-            <h1>دراسات جدوى المطاعم</h1>
+            <h1>
+              {menuTxt.studies} {menuTxt.restaurants}
+            </h1>
           </div>
           <div className="video">
             <video autoPlay={true} loop muted playsInline controls={false}>
@@ -62,7 +86,9 @@ export default function Feasibility_studies() {
         </Link>
         <Link to={"/E-commerce-projects"} className="type">
           <div className="text">
-            <h1> دراسات جدوى مشروعات التجارة الالكترونية</h1>
+            <h1>
+              {menuTxt.studies} {menuTxt.ecommerce}
+            </h1>
           </div>
           <div className="video">
             <video autoPlay={true} loop muted playsInline controls={false}>
@@ -72,7 +98,9 @@ export default function Feasibility_studies() {
         </Link>
         <Link to={"/schools"} className="type">
           <div className="text">
-            <h1>دراسات جدوى المدارس</h1>
+            <h1>
+              {menuTxt.studies} {menuTxt.schools}
+            </h1>
           </div>
           <div className="video">
             <video autoPlay={true} loop muted playsInline controls={false}>
@@ -82,7 +110,9 @@ export default function Feasibility_studies() {
         </Link>
         <Link to={"/Medical-sector"} className="type">
           <div className="text">
-            <h1>دراسات جدوى القطاع الطبي</h1>
+            <h1>
+              {menuTxt.studies} {menuTxt.medical}
+            </h1>
           </div>
           <div className="video">
             <video autoPlay={true} loop muted playsInline controls={false}>
@@ -92,7 +122,9 @@ export default function Feasibility_studies() {
         </Link>
         <Link to={"/other-projects"} className="type">
           <div className="text">
-            <h1>دراسات جدوى اخرى</h1>
+            <h1>
+              {menuTxt.studies} {menuTxt.others}
+            </h1>
           </div>
           <div className="video">
             <video autoPlay={true} loop muted playsInline controls={false}>

@@ -385,7 +385,7 @@ function App() {
         },
       });
 
-      if (response.status === 200)
+      if (response.status === 200 || response.status === 201)
         return toast.success("تم حفظ البيانات بنجاح ");
     } catch (error) {
       console.error("Error saving text content:", error);
@@ -417,6 +417,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [content, setContent] = useState({});
+  const [paperwork, setpaperwork] = useState({});
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -425,7 +426,12 @@ function App() {
         setContent(response.data.data);
         const response2 = await axios.get("/hero");
         setHero(response2.data.data);
-
+        const response3 = await axios.get("/paperwork");
+        setpaperwork(response3.data.data);
+        if (localStorage.getItem("paperwork")) {
+          localStorage.setItem("paperwork", null);
+        }
+        localStorage.setItem("paperwork", JSON.stringify(response3.data.data));
         setError(null);
       } catch (err) {
         setError(err.response?.data?.error || err.message);
@@ -473,6 +479,53 @@ function App() {
       <path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-320h80v320q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z" />
     </svg>
   );
+  const [menuTxt, setmenuTxt] = useState({});
+
+  useEffect(() => {
+    try {
+      const savedMenu = localStorage.getItem("menuTxt");
+      if (savedMenu && savedMenu !== "undefined") {
+        setmenuTxt(JSON.parse(savedMenu));
+      }
+    } catch (err) {
+      console.warn("Failed to parse saved menuTxt from localStorage:", err);
+      setmenuTxt({});
+    }
+  }, []);
+  const [isEditing_paperwork, setisEditing_paperwork] = useState(false);
+  const [editableText, setEditableText] = useState(
+    "نعرض عليكم اكثر الاسئلة شيوعاً من عملائنا الكرام"
+  );
+  const [previewImage, setPreviewImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const toggleEditing_paperwork = async () => {
+    if (isEditing_paperwork) {
+      await handleSaveChanges_paperwork();
+    }
+    setisEditing_paperwork((prev) => !prev);
+  };
+  const handleImageUpload_paperwork = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+  const handleSaveChanges_paperwork = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("text", editableText);
+      if (imageFile) formData.append("image", imageFile);
+
+      const response = await axios.post("/paperwork/save", formData);
+      if (response.status === 200) {
+        toast.success("تم حفظ التغييرات");
+      }
+    } catch (err) {
+      toast.error("فشل في حفظ التغييرات");
+      console.error(err);
+    }
+  };
 
   return (
     <motion.div
@@ -632,13 +685,7 @@ function App() {
               </video>
             </div>
             <div className="text">
-              <h1
-                contentEditable={isEditing}
-                suppressContentEditableWarning={true}
-                data-key="card1Title"
-              >
-                {content?.card1Title || ""}
-              </h1>
+              <h1>{menuTxt.studies || ""}</h1>
               <p
                 contentEditable={isEditing}
                 suppressContentEditableWarning={true}
@@ -662,13 +709,7 @@ function App() {
               </video>
             </div>
             <div className="text">
-              <h1
-                contentEditable={isEditing}
-                suppressContentEditableWarning={true}
-                data-key="card2Title"
-              >
-                {content?.card2Title || ""}
-              </h1>
+              <h1>{menuTxt.adminConsult || ""}</h1>
               <p
                 contentEditable={isEditing}
                 suppressContentEditableWarning={true}
@@ -692,13 +733,7 @@ function App() {
               </video>
             </div>
             <div className="text">
-              <h1
-                contentEditable={isEditing}
-                suppressContentEditableWarning={true}
-                data-key="card3Title"
-              >
-                {content?.card3Title || ""}
-              </h1>
+              <h1>{menuTxt.filesMgmt || ""}</h1>
               <p
                 contentEditable={isEditing}
                 suppressContentEditableWarning={true}
@@ -956,11 +991,47 @@ function App() {
         </Swiper>
       </div>
       <div className="paperwork">
-        <img src={paperwork} alt="" />
+        {/* Editable Image */}
+
+        <img
+          src={previewImage || paperwork.paperworkImage}
+          alt=""
+          style={{ cursor: "pointer" }}
+        />
+
+        {/* Editable Heading */}
         <AnimatedContent threshold={0.3} delay={0.2} duration={1.2}>
-          <h2>نعرض عليكم اكثر الاسئلة شيوعاً من عملائنا الكرام</h2>
+          <h2
+            contentEditable={isEditing_paperwork}
+            suppressContentEditableWarning
+            onInput={(e) => setEditableText(e.currentTarget.innerText)}
+            style={
+              isEditing_paperwork ? { borderBottom: "1px dashed gray" } : {}
+            }
+          >
+            {editableText || paperwork.paperworkText}
+          </h2>
         </AnimatedContent>
+
+        {/* Actions */}
+        <div className="actions">
+          <button>
+            {isEditing_paperwork && (
+              <input
+                type="file"
+                accept="image/*"
+                data-keyhero="paperwork_image"
+                onChange={handleImageUpload_paperwork}
+              />
+            )}
+            {imgicon}
+          </button>
+          <button onClick={toggleEditing_paperwork}>
+            {isEditing_paperwork ? "حفظ" : "تفعيل"}
+          </button>
+        </div>
       </div>
+
       <div className="commonQuestion">
         <div className="top">
           <button
