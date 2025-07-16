@@ -326,6 +326,36 @@
         }
       }
     }
+    table {
+      border-collapse: collapse;
+      font-family: var(--arabic-fm-b);
+      font-size: var(--font-small);
+      width: 100%;
+
+      th,
+      td {
+        padding: 0.5rem;
+        text-align: center;
+        border: 2px solid var(--primary-clr);
+        background: transparent;
+        transition: all 0.3s ease;
+
+        textarea {
+          padding: 0.5rem;
+          background: transparent;
+          border: none;
+        }
+        button {
+          width: 40%;
+          margin-inline: 0.5rem;
+          background: var(--primary-clr);
+          color: var(--txt-clr-light);
+        }
+        &:hover {
+          background: var(--body-bg-clr);
+        }
+      }
+    }
   }
 }
 // for mobile

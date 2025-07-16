@@ -461,6 +461,37 @@
   color: var(--txt-clr);
   border: 1px solid var(--body-bg-clr-gray);
 }
+.about-pages .cards table {
+  border-collapse: collapse;
+  font-family: var(--arabic-fm-b);
+  font-size: var(--font-small);
+  width: 100%;
+}
+.about-pages .cards table th,
+.about-pages .cards table td {
+  padding: 0.5rem;
+  text-align: center;
+  border: 2px solid var(--primary-clr);
+  background: transparent;
+  transition: all 0.3s ease;
+}
+.about-pages .cards table th textarea,
+.about-pages .cards table td textarea {
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+}
+.about-pages .cards table th button,
+.about-pages .cards table td button {
+  width: 40%;
+  margin-inline: 0.5rem;
+  background: var(--primary-clr);
+  color: var(--txt-clr-light);
+}
+.about-pages .cards table th:hover,
+.about-pages .cards table td:hover {
+  background: var(--body-bg-clr);
+}
 
 @media (max-width: 600px) {
   .headerimg {

@@ -1,8 +1,6 @@
-import { React, useState, useEffect, useRef } from "react";
+import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-//improt images
 import paperwork from "../assets/images/paperwork.jpg";
-
 import "../assets/style/common/aboutPages.css";
 import AnimatedContent from "../components/AnimatedContent";
 import axios from "../axiosInstance";
@@ -12,17 +10,38 @@ import { motion } from "framer-motion";
 
 export default function Emails() {
   const [emails, setEmails] = useState([]);
+  const [notes, setNotes] = useState({}); // key = email ID, value = note text
 
   useEffect(() => {
     axios
       .get("/email/get")
       .then((response) => {
         setEmails(response.data);
+        console.log(response.data);
       })
+
       .catch((error) => {
         console.error("Error fetching emails:", error);
       });
   }, []);
+
+  const handleNoteChange = (id, value) => {
+    setNotes((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmitNote = async (id) => {
+    try {
+      const note = notes[id];
+   
+
+      await axios.post(`/email/note/${id}`, { note });
+      toast.success("تم حفظ الملاحظة بنجاح");
+    } catch (error) {
+      toast.error("فشل في حفظ الملاحظة");
+      console.error(error);
+    }
+  };
+
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: (i) => ({
@@ -35,6 +54,19 @@ export default function Emails() {
       },
     }),
   };
+  const handleDelete = async (id) => {
+    if (!window.confirm("هل أنت متأكد أنك تريد حذف هذا الطلب؟")) return;
+
+    try {
+      await axios.delete(`/email/delete/${id}`);
+      toast.success("تم الحذف بنجاح");
+      setEmails((prev) => prev.filter((email) => email._id !== id));
+    } catch (error) {
+      toast.error("فشل في الحذف");
+      console.error(error);
+    }
+  };
+
   return (
     <motion.div
       className="about-pages"
@@ -59,6 +91,7 @@ export default function Emails() {
             borderCollapse: "collapse",
             fontFamily: "var(--arabic-fm-b)",
             fontSize: "var(--font-small)",
+            width: "100%",
           }}
         >
           <thead>
@@ -67,22 +100,39 @@ export default function Emails() {
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
+              <th>Note</th>
+              <th>Action</th>
             </tr>
           </thead>
+
           <tbody>
-            {emails.map(({ _id, name, email, phone }, index) => (
+            {emails.map(({ _id, name, email, phone, note }, index) => (
               <tr key={_id}>
-                <td style={{ padding: "0.5rem", paddingInline: "1.5rem" }}>
-                  {index + 1}
+                <td>{index + 1}</td>
+                <td>{name}</td>
+                <td>{email}</td>
+                <td>{phone}+</td>
+                <td>
+                  <textarea
+                    rows="2"
+                    style={{ width: "100%", fontFamily: "inherit" }}
+                    value={notes[_id] !== undefined ? notes[_id] : note || ""}
+                    placeholder={"أدخل ملاحظة..."}
+                    onChange={(e) => handleNoteChange(_id, e.target.value)}
+                  />
                 </td>
-                <td style={{ padding: "0.5rem", paddingInline: "1.5rem" }}>
-                  {name}
-                </td>
-                <td style={{ padding: "0.5rem", paddingInline: "1.5rem" }}>
-                  {email}
-                </td>
-                <td style={{ padding: "0.5rem", paddingInline: "1.5rem" }}>
-                  {phone}+
+                <td>
+                  <button onClick={() => handleSubmitNote(_id)}> حفظ</button>
+                  <button
+                    onClick={() => handleDelete(_id)}
+                    style={{
+                      marginTop: "0.5rem",
+                      background: "#b91c1c",
+                      color: "white",
+                    }}
+                  >
+                    حذف
+                  </button>
                 </td>
               </tr>
             ))}
@@ -94,11 +144,7 @@ export default function Emails() {
         position="bottom-left"
         autoClose={5000}
         hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={true}
         rtl
-        pauseOnFocusLoss
-        draggable
         pauseOnHover
         theme="colored"
         style={{ zIndex: 10000 }}
