@@ -473,18 +473,21 @@ body {
           margin-bottom: 5rem;
           isolation: isolate;
           > p {
+            width: clamp(300px, 100%, 500px);
+            border: none;
+            outline: none;
             position: relative;
             font-size: var(--font-body);
             font-family: var(--arabic-fm-b);
             color: var(--txt-clr-gray);
             text-align: justify;
+            white-space: pre-wrap;
             border-radius: var(--border-radius);
             background: var(--body-bg-clr);
             word-spacing: 0.4ch;
             font-weight: bold;
             line-height: 3.8ch;
             padding: 50px 40px 65px;
-
             isolation: isolate;
             display: grid;
             place-content: center;
@@ -538,6 +541,40 @@ body {
               color: var(--primary-clr);
             }
           }
+          .delete_feedback_icon {
+            background: var(--primary-clr);
+            padding: 0.5rem 1rem;
+            display: grid;
+            border-radius: var(--border-radius);
+            outline: none;
+            border: none;
+            place-content: center;
+            svg {
+              fill: var(--light-svg-clr);
+            }
+          }
+        }
+      }
+      .actions {
+        width: 100%;
+        @include flex(center, flex-start, row, 1rem);
+        padding: 2rem;
+        z-index: 3;
+        button {
+          position: relative;
+          border: none;
+          outline: none;
+          overflow: hidden;
+          display: grid;
+          place-content: center;
+          padding: 0.5rem 1rem;
+          background: var(--primary-clr);
+          font-size: var(--font-h4);
+          color: var(--txt-clr-light);
+          font-family: var(--arabic-fm-exb);
+          svg {
+              fill: var(--light-svg-clr);
+            }
         }
       }
       .swiper-button-next,

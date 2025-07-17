@@ -660,11 +660,15 @@ body .container .feedback .feedbackSwiper .feedBack-text {
   isolation: isolate;
 }
 body .container .feedback .feedbackSwiper .feedBack-text > p {
+  width: clamp(300px, 100%, 500px);
+  border: none;
+  outline: none;
   position: relative;
   font-size: var(--font-body);
   font-family: var(--arabic-fm-b);
   color: var(--txt-clr-gray);
   text-align: justify;
+  white-space: pre-wrap;
   border-radius: var(--border-radius);
   background: var(--body-bg-clr);
   word-spacing: 0.4ch;
@@ -727,6 +731,44 @@ body .container .feedback .feedbackSwiper .feedBack-text .person .job {
   font-family: var(--arabic-fm-r);
   color: var(--txt-clr-light);
   color: var(--primary-clr);
+}
+body .container .feedback .feedbackSwiper .feedBack-text .delete_feedback_icon {
+  background: var(--primary-clr);
+  padding: 0.5rem 1rem;
+  display: grid;
+  border-radius: var(--border-radius);
+  outline: none;
+  border: none;
+  place-content: center;
+}
+body .container .feedback .feedbackSwiper .feedBack-text .delete_feedback_icon svg {
+  fill: var(--light-svg-clr);
+}
+body .container .feedback .actions {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 2rem;
+  z-index: 3;
+}
+body .container .feedback .actions button {
+  position: relative;
+  border: none;
+  outline: none;
+  overflow: hidden;
+  display: grid;
+  place-content: center;
+  padding: 0.5rem 1rem;
+  background: var(--primary-clr);
+  font-size: var(--font-h4);
+  color: var(--txt-clr-light);
+  font-family: var(--arabic-fm-exb);
+}
+body .container .feedback .actions button svg {
+  fill: var(--light-svg-clr);
 }
 body .container .feedback .swiper-button-next,
 body .container .feedback .swiper-button-prev {

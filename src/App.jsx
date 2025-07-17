@@ -32,6 +32,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
+  const swiperRef = useRef(null);
+  const videoRef = useRef(null);
+
+  const [isVideoVisible, setIsVideoVisible] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
   const [aboutData, setAboutData] = useState({});
@@ -284,9 +288,6 @@ function App() {
     });
   }, []);
 
-  const [isVideoVisible, setIsVideoVisible] = useState(false);
-  const videoRef = useRef(null);
-
   const handlePlayClick = () => {
     setIsVideoVisible(true);
 
@@ -523,6 +524,139 @@ function App() {
       }
     } catch (err) {
       toast.error("فشل في حفظ التغييرات");
+      console.error(err);
+    }
+  };
+
+  const [isEditing_q, setIsEditing_q] = useState(false);
+
+  const feedbackRef = useRef([]);
+
+  const [feedbacks, setFeedbacks] = useState([...feedbackRef.current]);
+
+  const handleInput = (e) => {
+    const index = parseInt(e.target.getAttribute("data-feedback-index"));
+    const key = e.target.getAttribute("data-q");
+    const value = e.target.innerText;
+
+    const updated = [...feedbacks];
+    updated[index][key] = value;
+    setFeedbacks(updated);
+  };
+
+  const deleteicon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      fill="#1f1f1f"
+    >
+      <path d="M280-120q-33 0-56.5-23.5T200-200v-520q-17 0-28.5-11.5T160-760q0-17 11.5-28.5T200-800h160q0-17 11.5-28.5T400-840h160q17 0 28.5 11.5T600-800h160q17 0 28.5 11.5T800-760q0 17-11.5 28.5T760-720v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM400-280q17 0 28.5-11.5T440-320v-280q0-17-11.5-28.5T400-640q-17 0-28.5 11.5T360-600v280q0 17 11.5 28.5T400-280Zm160 0q17 0 28.5-11.5T600-320v-280q0-17-11.5-28.5T560-640q-17 0-28.5 11.5T520-600v280q0 17 11.5 28.5T560-280ZM280-720v520-520Z" />
+    </svg>
+  );
+
+  const new_comment = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      fill="#1f1f1f"
+    >
+      <path d="m240-280-86 86q-10 10-22 5t-12-19v-552q0-33 23.5-56.5T200-840h480q33 0 56.5 23.5T760-760v161q0 17-11.5 28T720-560q-17 0-28.5-11.5T680-600v-160H200v400h240q17 0 28.5 11.5T480-320q0 17-11.5 28.5T440-280H240Zm80-320h240q17 0 28.5-11.5T600-640q0-17-11.5-28.5T560-680H320q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm0 160h120q17 0 28.5-11.5T480-480q0-17-11.5-28.5T440-520H320q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm360 160h-80q-17 0-28.5-11.5T560-320q0-17 11.5-28.5T600-360h80v-80q0-17 11.5-28.5T720-480q17 0 28.5 11.5T760-440v80h80q17 0 28.5 11.5T880-320q0 17-11.5 28.5T840-280h-80v80q0 17-11.5 28.5T720-160q-17 0-28.5-11.5T680-200v-80Zm-480-80v-400 400Z" />
+    </svg>
+  );
+  useEffect(() => {
+    fetchFeedbacks();
+  }, []);
+
+  const fetchFeedbacks = async () => {
+    try {
+      const res = await axios.get("/feedbacks");
+      setFeedbacks(res.data);
+    } catch (err) {
+      toast.error("حدث خطأ أثناء تحميل التعليقات");
+      console.error(err);
+    }
+  };
+
+  const handleAddFeedback = () => {
+    const newFeedback = {
+      text: "نص جديد",
+      name: "اسم",
+      job: "الوظيفة",
+      _id: Date.now().toString(), // Temporary ID for UI tracking
+      unsaved: true, // Flag to detect new feedbacks
+    };
+
+    setFeedbacks((prev) => [...prev, newFeedback]);
+
+    setTimeout(() => {
+      swiperRef.current?.slideTo(feedbacks.length);
+    }, 100);
+  };
+
+
+const handleToggleEdit = async () => {
+  if (isEditing_q) {
+    const updatedElements = document.querySelectorAll("[data-feedback-index]");
+    const updatedFeedbacks = [...feedbacks];
+
+    for (const el of updatedElements) {
+      const index = parseInt(el.getAttribute("data-feedback-index"));
+      const key = el.getAttribute("data-q");
+      const value = el.innerText.trim();
+
+      updatedFeedbacks[index][key] = value;
+    }
+
+    const newFeedbackList = [];
+
+    for (const feedback of updatedFeedbacks) {
+      try {
+        if (feedback.unsaved) {
+          // POST new feedback
+          const res = await axios.post("/feedbacks", {
+            text: feedback.text,
+            name: feedback.name,
+            job: feedback.job,
+          });
+          newFeedbackList.push(res.data); // Replace with saved version
+        } else {
+          // PUT existing feedback
+          await axios.put(`/feedbacks/${feedback._id}`, feedback);
+          newFeedbackList.push(feedback);
+        }
+      } catch (err) {
+        toast.error("فشل في حفظ التغييرات");
+        console.error(err);
+      }
+    }
+
+    setFeedbacks(newFeedbackList);
+    toast.success("تم حفظ التعديلات");
+  }
+
+  setIsEditing_q((prev) => !prev);
+};
+
+
+
+  const handleDeleteFeedback = async (indexToDelete) => {
+    const idToDelete = feedbacks[indexToDelete]._id;
+
+    try {
+      await axios.delete(`/feedbacks/${idToDelete}`);
+      const updated = feedbacks.filter((_, i) => i !== indexToDelete);
+      setFeedbacks(updated);
+      toast.success("تم حذف التعليق");
+
+      setTimeout(() => {
+        swiperRef.current?.slideTo(Math.max(0, updated.length - 1));
+      }, 100);
+    } catch (err) {
+      toast.error("فشل في حذف التعليق");
       console.error(err);
     }
   };
@@ -888,108 +1022,88 @@ function App() {
           </header>
         </AnimatedContent>
         <Swiper
+          ref={swiperRef}
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
           dir="rtl"
-          rewind={true}
           spaceBetween={30}
           centeredSlides={true}
-          slidesPerView={1} // 👈 default for mobile
+          slidesPerView={1}
           breakpoints={{
             768: {
-              slidesPerView: 3, // 👈 from 768px and up (desktop/tablet)
+              slidesPerView: 3,
             },
           }}
-          autoplay={{
-            delay: 4500,
-            disableOnInteraction: false,
-          }}
-          speed={1500}
           navigation={true}
           pagination={{ clickable: true }}
           modules={[Autoplay, Navigation, Pagination]}
           className="feedbackSwiper"
         >
-          <SwiperSlide>
-            <AnimatedContent threshold={0.7} delay={0.2} duration={1.2}>
-              <div className="feedBack-text">
-                <p>
-                  “ما نستطيع قوله بشأن ادارة شركة شارِك في اختيار فريق عمل
-                  متكامل حقق لي العديد من الخدمات والإستشارات وعدد ٢ دراسة جدوى
-                  لمشروعات خاصة بي حقا ما يميز هذه الشركة هو قدرتهم على الادارة
-                  المتميزة التي حققت المعادلة بين الأسعار المناسبة والجودة
-                  المطلوبة. شكرا لكم”
+          {feedbacks.map((item, i) => (
+            <SwiperSlide key={i}>
+              <motion.div
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={cardVariants}
+                className="feedBack-text"
+              >
+                <p
+                  contentEditable={isEditing_q}
+                  suppressContentEditableWarning
+                  data-feedback-index={i}
+                  data-q="text"
+                  onInput={handleInput}
+                >
+                  {item.text}
                 </p>
                 <span className="person">
-                  <p className="name">فاطمة المري</p>
-                  <p className="job">صاحب المشروع</p>
+                  <p
+                    className="name"
+                    contentEditable={isEditing_q}
+                    suppressContentEditableWarning
+                    data-feedback-index={i}
+                    data-q="name"
+                    onInput={handleInput}
+                  >
+                    {item.name}
+                  </p>
+
+                  <p
+                    className="job"
+                    contentEditable={isEditing_q}
+                    suppressContentEditableWarning
+                    data-feedback-index={i}
+                    data-q="job"
+                    onInput={handleInput}
+                  >
+                    {item.job}
+                  </p>
                 </span>
-              </div>
-            </AnimatedContent>
-          </SwiperSlide>
-          <SwiperSlide>
-            <AnimatedContent threshold={0.7} delay={0.2} duration={1.2}>
-              <div className="feedBack-text">
-                <p>
-                  “كنت ابحث عن شركة تقوم بإعداد دراسة جدوى لمشروع مصنع هياكل
-                  حديدية واخبرني اخوي بان اقوم بعمل دراسة الجدوى من خلال شركة
-                  شارِك للإستشارات واستلمت دراسة جدوى للمشروع وحصلت على الموافقة
-                  بدون أي تعديلات بفضل الله”
-                </p>
-                <span className="person">
-                  <p className="name">عبد العزيز الكواري</p>
-                  <p className="job">رائد اعمال</p>
-                </span>
-              </div>
-            </AnimatedContent>
-          </SwiperSlide>
-          <SwiperSlide>
-            <AnimatedContent threshold={0.7} delay={0.2} duration={1.2}>
-              <div className="feedBack-text">
-                <p>
-                  “كانت شركة شارِك للإستشارات سببا في تغيير مستقبلي حيث قمت من
-                  خلالهم بطلب خدمة دراسة جدوى وبالفعل حصلت على دراسة الجدوى
-                  للمشروع وبالفعل كانت النتائج الحمد لله مرضية”
-                </p>
-                <span className="person">
-                  <p className="name">احمد المعاضيد</p>
-                  <p className="job">رائد اعمال</p>
-                </span>
-              </div>
-            </AnimatedContent>
-          </SwiperSlide>
-          <SwiperSlide>
-            <AnimatedContent threshold={0.7} delay={0.2} duration={1.2}>
-              <div className="feedBack-text">
-                <p>
-                  “ما نستطيع قوله بشأن ادارة شركة شارِك في اختيار فريق عمل
-                  متكامل حقق لي العديد من الخدمات والإستشارات وعدد ٢ دراسة جدوى
-                  لمشروعات خاصة بي حقا ما يميز هذه الشركة هو قدرتهم على الادارة
-                  المتميزة التي حققت المعادلة بين الأسعار المناسبة والجودة
-                  المطلوبة. شكرا لكم”
-                </p>
-                <span className="person">
-                  <p className="name">محمد الهاجري</p>
-                  <p className="job">رجل أعمال</p>
-                </span>
-              </div>
-            </AnimatedContent>
-          </SwiperSlide>
-          <SwiperSlide>
-            <AnimatedContent threshold={0.7} delay={0.2} duration={1.2}>
-              <div className="feedBack-text">
-                <p>
-                  “ان صدق التعامل في الوقت والدقة للمشروع الذي قمت بإعداد دراسة
-                  جدوى لدى شركة شارِك للإستشارات هو ما جعلني استمر معهم في
-                  العديد من الإستشارات الاخرى لمشاريعي”
-                </p>
-                <span className="person">
-                  <p className="name">ناصر الدوسري</p>
-                  <p className="job">رجل أعمال</p>
-                </span>
-              </div>
-            </AnimatedContent>
-          </SwiperSlide>
+
+                {isEditing_q && (
+                  <button
+                    onClick={() => handleDeleteFeedback(i)}
+                    className="delete_feedback_icon"
+                  >
+                    {deleteicon}
+                  </button>
+                )}
+              </motion.div>
+            </SwiperSlide>
+          ))}
         </Swiper>
+        <div className="actions">
+          <button onClick={handleToggleEdit}>
+            {isEditing_q ? "حفظ" : "تعديل"}
+          </button>
+
+          {isEditing_q && (
+            <button onClick={handleAddFeedback}>{new_comment}</button>
+          )}
+        </div>
       </div>
+
       <div className="paperwork">
         {/* Editable Image */}
 
