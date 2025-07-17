@@ -836,7 +836,7 @@ function App() {
               <input
                 type="file"
                 accept="video/*"
-                data-keyhero="be_video"
+                data-keyhero="bg_video"
                 onChange={handleImageUpload_hero}
               />
             )}
