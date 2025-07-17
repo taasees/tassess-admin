@@ -632,6 +632,11 @@ body .container .feedback .feedback-header span {
   padding: 0.5rem 1.5rem;
   border: 1px solid;
   border-radius: 5rem;
+  display: grid;
+  place-content: center;
+}
+body .container .feedback .feedback-header span svg {
+  fill: var(--light-svg-clr);
 }
 body .container .feedback .feedback-header h3 {
   font-size: var(--font-h2);

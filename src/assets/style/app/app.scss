@@ -454,6 +454,11 @@ body {
           padding: 0.5rem 1.5rem;
           border: 1px solid;
           border-radius: 5rem;
+          display: grid;
+          place-content: center;
+          svg {
+            fill: var(--light-svg-clr);
+          }
         }
         h3 {
           font-size: var(--font-h2);
@@ -573,8 +578,8 @@ body {
           color: var(--txt-clr-light);
           font-family: var(--arabic-fm-exb);
           svg {
-              fill: var(--light-svg-clr);
-            }
+            fill: var(--light-svg-clr);
+          }
         }
       }
       .swiper-button-next,
