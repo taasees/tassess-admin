@@ -3,8 +3,7 @@ import { toast } from "react-toastify";
 import { emit } from "./loadingEvents";
 
 const axiosInstance = axios.create({
-  // baseURL: import.meta.env.VITE_API_URL,
-  baseURL: "http://localhost:5005",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 // Keep track of how many GET requests are active
