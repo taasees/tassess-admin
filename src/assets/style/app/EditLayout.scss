@@ -22,9 +22,25 @@
       transform: translateX(0%);
       opacity: 1;
     }
-    .fonts {
+    .holder {
       position: relative;
+      overflow-y: scroll;
       @include flex(flex-start, flex-start, column, 1rem);
+      font-family: var(--arabic-fm-r) !important;
+      button {
+        border: none;
+        outline: none;
+        display: grid;
+        place-content: center;
+        color: var(--txt-clr-light);
+        background: var(--primary-clr);
+      }
+      input {
+        background: transparent;
+
+        text-align: center;
+        border: 1px solid var(--txt-clr-gray);
+      }
       .top {
         width: 100%;
         @include flex(center, space-between, row, 0.5rem);

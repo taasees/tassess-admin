@@ -89,7 +89,6 @@ function App() {
         const key = el.getAttribute("data-keyhero");
         const value = el.textContent.trim();
 
-        // Skip checking non-text fields (like video or thumbnail)
         if (!value && key !== "bg_video") {
           toast.error(`الحقل "${key}" لا يمكن أن يكون فارغًا`);
           hasEmptyFields = true;
@@ -100,40 +99,50 @@ function App() {
 
       if (hasEmptyFields) return;
 
-      // setTextValues(newValues);
-      console.log("Saved Values:", newValues);
-
-      // Call your saving function here
       const saveTextContent_hero = async (textValues) => {
         try {
           const formData = new FormData();
 
+          // Append hero text values
           for (const key in textValues) {
             formData.append(key, textValues[key]);
           }
 
+          // Append video if available
           if (bg_videoupload) {
-            formData.append("bg_video", bg_videoupload); // same name as multer expects
+            formData.append("bg_video", bg_videoupload);
           }
-          // console.log(bg_videoupload);
+
+          // Append image files and their visibility status
+          for (const key of ["slide1", "slide2", "slide3"]) {
+            if (images[key].file) {
+              formData.append(`${key}_image`, images[key].file);
+            }
+            // 🔥 Important: Convert to string to avoid `[ 'true', 'false' ]` issues
+            formData.set(`${key}_visible`, images[key].visible.toString());
+          }
+
           const response = await axios.post("/hero", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
           });
 
-          if (response.status === 200 || response.status == 201)
-            return toast.success("تم حفظ البيانات بنجاح ");
+          if (response.status === 200 || response.status === 201) {
+            toast.success("تم حفظ البيانات بنجاح");
+          }
         } catch (error) {
-          console.error("Error saving text content:", error);
+          console.error("Error saving hero section:", error);
           toast.error("حدث خطأ أثناء الحفظ");
         }
       };
+
       saveTextContent_hero(newValues);
     }
-    // Toggle editing state
+
     setIsEditing_hero((prev) => !prev);
   };
+
   const handleImageUpload_hero = (e) => {
     const file = e.target.files[0];
 
@@ -419,30 +428,64 @@ function App() {
   const [error, setError] = useState(null);
   const [content, setContent] = useState({});
   const [paperwork, setpaperwork] = useState({});
+  const [images, setImages] = useState({
+    slide1: { file: null, visible: true, preview: null },
+    slide2: { file: null, visible: true, preview: null },
+    slide3: { file: null, visible: true, preview: null },
+  });
+  const [showImages, setShowImages] = useState(true);
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
         const response = await axios.get("/textContent");
         setContent(response.data.data);
+
         const response2 = await axios.get("/hero");
-        setHero(response2.data.data);
+        const heroData = response2.data.data;
+        setHero(heroData);
+
+        // ✅ Update images state from hero response
+        setImages((prev) => ({
+          ...prev,
+          slide1: {
+            ...prev.slide1,
+            file: null,
+            visible: heroData.slide1_visible ?? true,
+            preview: heroData.slide1_imageUrl || null,
+          },
+          slide2: {
+            ...prev.slide2,
+            file: null,
+            visible: heroData.slide2_visible ?? true,
+            preview: heroData.slide2_imageUrl || null,
+          },
+          slide3: {
+            ...prev.slide3,
+            file: null,
+            visible: heroData.slide3_visible ?? true,
+            preview: heroData.slide3_imageUrl || null,
+          },
+        }));
+        setShowImages(heroData.slide3_visible);
         const response3 = await axios.get("/paperwork");
         setpaperwork(response3.data.data);
         if (localStorage.getItem("paperwork")) {
           localStorage.setItem("paperwork", null);
         }
         localStorage.setItem("paperwork", JSON.stringify(response3.data.data));
+
         setError(null);
       } catch (err) {
         setError(err.response?.data?.error || err.message);
         setContent(null);
       } finally {
         setLoading(false);
+
         setTimeout(() => {
           const videoEl = document.getElementById("bg_video");
           if (videoEl) {
-            videoEl.load(); // Reload the new source
+            videoEl.load();
             const onLoadedData = () => {
               videoEl.play().catch((err) => {
                 console.error("Auto-play failed:", err);
@@ -719,6 +762,31 @@ function App() {
     }
   };
 
+  // Handle image file change
+  const handleImageChange = (slideKey, file) => {
+    const preview = URL.createObjectURL(file);
+    setImages((prev) => ({
+      ...prev,
+      [slideKey]: {
+        ...prev[slideKey],
+        file,
+        preview,
+        visible,
+      },
+    }));
+  };
+
+  // Toggle visibility for all
+  const toggleImageVisibility = () => {
+    setImages((prev) =>
+      Object.fromEntries(
+        Object.entries(prev).map(([key, value]) => [
+          key,
+          { ...value, visible: !images.slide1.visible },
+        ])
+      )
+    );
+  };
   return (
     <motion.div
       className="container"
@@ -742,13 +810,7 @@ function App() {
           {/* Slide 1 */}
           <SwiperSlide>
             <div className="swipe-image">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
-                variants={cardVariants}
-                className="text"
-              >
+              <div className="text">
                 <h2
                   contentEditable={isEditing_hero}
                   suppressContentEditableWarning={true}
@@ -763,12 +825,19 @@ function App() {
                 >
                   {Hero.slide1_desc || ""}
                 </p>
-                {/* <Link to={""}>اطلب الخدمة</Link> */}
-              </motion.div>
-
-              <div className="img">
-                <img src={img1} alt="" />
               </div>
+              {images.slide1.visible && (
+                <div className="img">
+                  <img src={images.slide1.preview || img1} alt="slide1" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      handleImageChange("slide1", e.target.files[0])
+                    }
+                  />
+                </div>
+              )}
             </div>
           </SwiperSlide>
 
@@ -790,11 +859,20 @@ function App() {
                 >
                   {Hero.slide2_desc || ""}
                 </p>
-                {/* <Link to={""}>اطلب الخدمة</Link> */}
               </div>
-              <div className="img">
-                <img src={img2} alt="" />
-              </div>
+              {images.slide1.visible && (
+                <div className="img">
+                  <img src={images.slide2.preview || img2} alt="slide2" />
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      handleImageChange("slide2", e.target.files[0])
+                    }
+                  />
+                </div>
+              )}
             </div>
           </SwiperSlide>
 
@@ -816,11 +894,19 @@ function App() {
                 >
                   {Hero.slide3_desc || ""}
                 </p>
-                {/* <Link to={""}>اطلب الخدمة</Link> */}
               </div>
-              <div className="img">
-                <img src={img3} alt="" />
-              </div>
+              {images.slide3.visible && (
+                <div className="img">
+                  <img src={images.slide3.preview || img3} alt="slide3" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      handleImageChange("slide3", e.target.files[0])
+                    }
+                  />
+                </div>
+              )}
             </div>
           </SwiperSlide>
         </Swiper>
@@ -831,17 +917,25 @@ function App() {
           </video>
         </div>
         <div className="actions">
-          <button>
-            {isEditing_hero && (
-              <input
-                type="file"
-                accept="video/*"
-                data-keyhero="bg_video"
-                onChange={handleImageUpload_hero}
-              />
-            )}
-            {videoIcon}
-          </button>
+          {isEditing_hero && (
+            <button onClick={toggleImageVisibility}>
+              {images.slide1.visible ? hidden : visible}
+            </button>
+          )}
+          {isEditing_hero && (
+            <button>
+              {isEditing_hero && (
+                <input
+                  type="file"
+                  accept="video/*"
+                  data-keyhero="bg_video"
+                  onChange={handleImageUpload_hero}
+                />
+              )}
+              {videoIcon}
+            </button>
+          )}
+
           <button onClick={toggleEditing_hero}>
             {isEditing_hero ? "حفظ" : "تفعيل"}
           </button>

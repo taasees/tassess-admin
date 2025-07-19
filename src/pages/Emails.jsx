@@ -17,7 +17,6 @@ export default function Emails() {
       .get("/email/get")
       .then((response) => {
         setEmails(response.data);
-        console.log(response.data);
       })
 
       .catch((error) => {

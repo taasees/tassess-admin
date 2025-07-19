@@ -24,7 +24,7 @@ function Loading() {
           transition={{ duration: 0.3 }}
           className="spinner"
         >
-          <Helix size="120" speed="2.5" color="#f5b400" />
+          <Helix size="120" speed="2.5" color="var(--primary-clr)" />
         </motion.div>
       )}
     </>
