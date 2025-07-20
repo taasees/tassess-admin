@@ -1,10 +1,10 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import "../assets/style/footer/footer.css";
 import logo from "../assets/images/Logo_1.webp";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  // const currentYear = new Date().getFullYear();
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: (i) => ({
@@ -17,14 +17,21 @@ export default function Footer() {
       },
     }),
   };
+  const [menuTxt, setmenuTxt] = useState({});
+
+  useEffect(() => {
+    try {
+      const savedMenu = localStorage.getItem("menuTxt");
+      if (savedMenu && savedMenu !== "undefined") {
+        setmenuTxt(JSON.parse(savedMenu));
+      }
+    } catch (err) {
+      console.warn("Failed to parse saved menuTxt from localStorage:", err);
+      setmenuTxt({});
+    }
+  }, []);
   return (
-    <motion.footer
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, delay: 1 }}
-      dir="auto"
-    >
+    <footer dir="auto">
       <div className="desktop">
         <div className="top">
           <motion.div
@@ -35,13 +42,9 @@ export default function Footer() {
             className="right"
           >
             <div className="img">
-              <img src={logo} alt="" />
+              <img src={menuTxt.logoUrl || logo} alt="" />
             </div>
-            <div className="text">
-              <p>
-                خبرتنا تمتد لأكثر من 13 عام من تقديم خدماتنا المميزة فى الخليج
-              </p>
-            </div>
+            <div className="text"></div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -54,15 +57,19 @@ export default function Footer() {
               <h4>اهم الروابط :</h4>
               <ul>
                 <li>
-                  <Link to={"/feasibility-studies"}>دراسات الجدوى</Link>
-                </li>
-                <li>
-                  <Link to={"/Administrational-consultations"}>
-                    إستشارات إدارية
+                  <Link to={"/feasibility-studies"}>
+                    {menuTxt.studies || ""}
                   </Link>
                 </li>
                 <li>
-                  <Link to={"/files-management"}>إدارة الملفات</Link>
+                  <Link to={"/Administrational-consultations"}>
+                    {menuTxt.adminConsult || ""}
+                  </Link>
+                </li>
+                <li>
+                  <Link to={"/files-management"}>
+                    {menuTxt.filesMgmt || ""}
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -83,7 +90,7 @@ export default function Footer() {
           </div>
           <div className="design">
             <p>
-              تم التصميم بواسطة
+              تم التصميم بواسطة 
               <Link to={"/"}> hussam shannan </Link>
             </p>
           </div>
@@ -109,8 +116,8 @@ export default function Footer() {
               hussam shannan
             </Link>
           </p>
-        </div>
+        </div> 
       </div>  */}
-    </motion.footer>
+    </footer>
   );
 }
