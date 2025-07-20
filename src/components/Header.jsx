@@ -182,7 +182,7 @@ export default function Header() {
               onInput={(e) => handleInput(e, "home")}
               onClick={handleLinkClick}
             >
-              {menuTxt.home}
+              {menuTxt.home || "..."}
             </Link>
           </li>
           <li>
@@ -191,7 +191,7 @@ export default function Header() {
               suppressContentEditableWarning
               onInput={(e) => handleInput(e, "aboutLabel")}
             >
-              {menuTxt.aboutLabel}
+              {menuTxt.aboutLabel || "..."}
             </p>
             <span>{downArrow}</span>
             <div className="droplist">
@@ -204,7 +204,7 @@ export default function Header() {
                     onInput={(e) => handleInput(e, "about")}
                     onClick={handleLinkClick}
                   >
-                    {menuTxt.about}
+                    {menuTxt.about || "..."}
                   </Link>
                 </li>
                 <li>
@@ -215,7 +215,7 @@ export default function Header() {
                     onInput={(e) => handleInput(e, "whyUs")}
                     onClick={handleLinkClick}
                   >
-                    {menuTxt.whyUs}
+                    {menuTxt.whyUs || "..."}
                   </Link>
                 </li>
               </ul>
@@ -229,7 +229,7 @@ export default function Header() {
               onInput={(e) => handleInput(e, "studies")}
               onClick={handleLinkClick}
             >
-              {menuTxt.studies}
+              {menuTxt.studies || "..."}
             </Link>
             <span>{downArrow}</span>
             <div className="droplist">
@@ -242,7 +242,7 @@ export default function Header() {
                     onInput={(e) => handleInput(e, "factories")}
                     onClick={handleLinkClick}
                   >
-                    {menuTxt.factories}
+                    {menuTxt.factories || "..."}
                   </Link>
                 </li>
                 <li>
@@ -253,7 +253,7 @@ export default function Header() {
                     onInput={(e) => handleInput(e, "restaurants")}
                     onClick={handleLinkClick}
                   >
-                    {menuTxt.restaurants}
+                    {menuTxt.restaurants || "..."}
                   </Link>
                 </li>
                 <li>
@@ -264,7 +264,7 @@ export default function Header() {
                     onInput={(e) => handleInput(e, "schools")}
                     onClick={handleLinkClick}
                   >
-                    {menuTxt.schools}
+                    {menuTxt.schools || "..."}
                   </Link>
                 </li>
                 <li>
@@ -275,7 +275,7 @@ export default function Header() {
                     onInput={(e) => handleInput(e, "farms")}
                     onClick={handleLinkClick}
                   >
-                    {menuTxt.farms}
+                    {menuTxt.farms || "..."}
                   </Link>
                 </li>
                 <li>
@@ -286,7 +286,7 @@ export default function Header() {
                     onInput={(e) => handleInput(e, "ecommerce")}
                     onClick={handleLinkClick}
                   >
-                    {menuTxt.ecommerce}
+                    {menuTxt.ecommerce || "..."}
                   </Link>
                 </li>
                 <li>
@@ -297,7 +297,7 @@ export default function Header() {
                     onInput={(e) => handleInput(e, "medical")}
                     onClick={handleLinkClick}
                   >
-                    {menuTxt.medical}
+                    {menuTxt.medical || "..."}
                   </Link>
                 </li>
                 <li>
@@ -308,7 +308,7 @@ export default function Header() {
                     onInput={(e) => handleInput(e, "others")}
                     onClick={handleLinkClick}
                   >
-                    {menuTxt.others}
+                    {menuTxt.others || ".."}
                   </Link>
                 </li>
               </ul>
@@ -322,7 +322,7 @@ export default function Header() {
               onInput={(e) => handleInput(e, "adminConsult")}
               onClick={handleLinkClick}
             >
-              {menuTxt.adminConsult}
+              {menuTxt.adminConsult || "..."}
             </Link>
           </li>
           <li>
@@ -333,7 +333,7 @@ export default function Header() {
               onInput={(e) => handleInput(e, "filesMgmt")}
               onClick={handleLinkClick}
             >
-              {menuTxt.filesMgmt}
+              {menuTxt.filesMgmt || "..."}
             </Link>
           </li>
           <li>
@@ -344,7 +344,7 @@ export default function Header() {
               onInput={(e) => handleInput(e, "prevWork")}
               onClick={handleLinkClick}
             >
-              {menuTxt.prevWork}
+              {menuTxt.prevWork || "..."}
             </Link>
           </li>
           <li>
@@ -355,7 +355,7 @@ export default function Header() {
               onInput={(e) => handleInput(e, "contact")}
               onClick={handleLinkClick}
             >
-              {menuTxt.contact}
+              {menuTxt.contact || "..."}
             </Link>
           </li>
           <li>
@@ -440,10 +440,10 @@ export default function Header() {
                 <div>
                   <ul>
                     <li>
-                      <Link to="/about">{menuTxt.about}</Link>
+                      <Link to="/about">{menuTxt.about || "..."}</Link>
                     </li>
                     <li>
-                      <Link to="/why-us">{menuTxt.whyUs}</Link>
+                      <Link to="/why-us">{menuTxt.whyUs || "..."}</Link>
                     </li>
                   </ul>
                 </div>
@@ -455,48 +455,54 @@ export default function Header() {
                 onClick={() => toggleDetails("feasibility")}
               >
                 <summary>
-                  <p>{menuTxt.studies}</p>
+                  <p>{menuTxt.studies || "..."}</p>
                   <span></span>
                 </summary>
                 <div>
                   <ul>
                     <li>
-                      <Link to="/factories">{menuTxt.factories}</Link>
+                      <Link to="/factories">{menuTxt.factories || "..."}</Link>
                     </li>
                     <li>
-                      <Link to="/restaurants">{menuTxt.restaurants}</Link>
+                      <Link to="/restaurants">
+                        {menuTxt.restaurants || "..."}
+                      </Link>
                     </li>
                     <li>
-                      <Link to="/schools">{menuTxt.schools}</Link>
+                      <Link to="/schools">{menuTxt.schools || "..."}</Link>
                     </li>
                     <li>
-                      <Link to="/farms">{menuTxt.farms}</Link>
+                      <Link to="/farms">{menuTxt.farms || "..."}</Link>
                     </li>
                     <li>
-                      <Link to="/e-commerce-projects">{menuTxt.ecommerce}</Link>
+                      <Link to="/e-commerce-projects">
+                        {menuTxt.ecommerce || "..."}
+                      </Link>
                     </li>
                     <li>
-                      <Link to="/medical-sector">{menuTxt.medical}</Link>
+                      <Link to="/medical-sector">
+                        {menuTxt.medical || "..."}
+                      </Link>
                     </li>
                     <li>
-                      <Link to="/other-projects">{menuTxt.others}</Link>
+                      <Link to="/other-projects">{menuTxt.others || ".."}</Link>
                     </li>
                   </ul>
                 </div>
               </div>
               <li>
                 <Link to="/Administrational-consultations">
-                  {menuTxt.adminConsult}
+                  {menuTxt.adminConsult || "..."}
                 </Link>
               </li>
               <li>
-                <Link to="/files-management">{menuTxt.filesMgmt}</Link>
+                <Link to="/files-management">{menuTxt.filesMgmt || "..."}</Link>
               </li>
               <li>
-                <Link to="/previous-works">{menuTxt.prevWork}</Link>
+                <Link to="/previous-works">{menuTxt.prevWork || "..."}</Link>
               </li>
               <li>
-                <Link to="/contact-request">{menuTxt.contact}</Link>
+                <Link to="/contact-request">{menuTxt.contact || "..."}</Link>
               </li>
             </ul>
           </nav>
