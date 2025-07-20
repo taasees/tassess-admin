@@ -816,14 +816,14 @@ function App() {
                   suppressContentEditableWarning={true}
                   data-keyhero="slide1_title"
                 >
-                  {Hero.slide1_title || ""}
+                  {Hero.slide1_title || "..."}
                 </h2>
                 <p
                   contentEditable={isEditing_hero}
                   suppressContentEditableWarning={true}
                   data-keyhero="slide1_desc"
                 >
-                  {Hero.slide1_desc || ""}
+                  {Hero.slide1_desc || "..."}
                 </p>
               </div>
               {images.slide1.visible && (
@@ -850,14 +850,14 @@ function App() {
                   suppressContentEditableWarning={true}
                   data-keyhero="slide2_title"
                 >
-                  {Hero.slide2_title || ""}
+                  {Hero.slide2_title || "..."}
                 </h2>
                 <p
                   contentEditable={isEditing_hero}
                   suppressContentEditableWarning={true}
                   data-keyhero="slide2_desc"
                 >
-                  {Hero.slide2_desc || ""}
+                  {Hero.slide2_desc || "..."}
                 </p>
               </div>
               {images.slide1.visible && (
@@ -885,14 +885,14 @@ function App() {
                   suppressContentEditableWarning={true}
                   data-keyhero="slide3_title"
                 >
-                  {Hero.slide3_title || ""}
+                  {Hero.slide3_title || "..."}
                 </h2>
                 <p
                   contentEditable={isEditing_hero}
                   suppressContentEditableWarning={true}
                   data-keyhero="slide3_desc"
                 >
-                  {Hero.slide3_desc || ""}
+                  {Hero.slide3_desc || "..."}
                 </p>
               </div>
               {images.slide3.visible && (
@@ -971,13 +971,13 @@ function App() {
               </video>
             </div>
             <div className="text">
-              <h1>{menuTxt.studies || ""}</h1>
+              <h1>{menuTxt.studies || "..."}</h1>
               <p
                 contentEditable={isEditing}
                 suppressContentEditableWarning={true}
                 data-key="card1Desc"
               >
-                {content?.card1Desc || ""}
+                {content?.card1Desc || "..."}
               </p>
             </div>
           </Link>
@@ -995,13 +995,13 @@ function App() {
               </video>
             </div>
             <div className="text">
-              <h1>{menuTxt.adminConsult || ""}</h1>
+              <h1>{menuTxt.adminConsult || "..."}</h1>
               <p
                 contentEditable={isEditing}
                 suppressContentEditableWarning={true}
                 data-key="card2Desc"
               >
-                {content?.card2Desc || ""}
+                {content?.card2Desc || "..."}
               </p>
             </div>
           </Link>
@@ -1019,13 +1019,13 @@ function App() {
               </video>
             </div>
             <div className="text">
-              <h1>{menuTxt.filesMgmt || ""}</h1>
+              <h1>{menuTxt.filesMgmt || "..."}</h1>
               <p
                 contentEditable={isEditing}
                 suppressContentEditableWarning={true}
                 data-key="card3Desc"
               >
-                {content?.card3Desc || ""}
+                {content?.card3Desc || "..."}
               </p>
             </div>
           </Link>
