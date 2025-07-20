@@ -194,10 +194,8 @@ export default function Edit() {
       const res = await axios.post("/colors/", payload);
 
       if (res.status === 200 || res.status === 201) {
-        toast.success("تم حفظ اللون");
       } else {
         console.error("Unexpected response status:", res.status);
-        toast.error("فشل حفظ اللون");
       }
     } catch (err) {
       console.error("Failed to save color:", err);
