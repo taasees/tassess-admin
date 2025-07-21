@@ -424,8 +424,6 @@ function App() {
     }
   };
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [content, setContent] = useState({});
   const [paperwork, setpaperwork] = useState({});
   const [images, setImages] = useState({
@@ -433,7 +431,6 @@ function App() {
     slide2: { file: null, visible: true, preview: null },
     slide3: { file: null, visible: true, preview: null },
   });
-  const [showImages, setShowImages] = useState(true);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -467,7 +464,6 @@ function App() {
             preview: heroData.slide3_imageUrl || null,
           },
         }));
-        setShowImages(heroData.slide3_visible);
         const response3 = await axios.get("/paperwork");
         setpaperwork(response3.data.data);
         if (localStorage.getItem("paperwork")) {
@@ -475,12 +471,8 @@ function App() {
         }
         localStorage.setItem("paperwork", JSON.stringify(response3.data.data));
 
-        setError(null);
       } catch (err) {
-        setError(err.response?.data?.error || err.message);
-        setContent(null);
       } finally {
-        setLoading(false);
 
         setTimeout(() => {
           const videoEl = document.getElementById("bg_video");
@@ -948,14 +940,14 @@ function App() {
             suppressContentEditableWarning={true}
             data-key="headerTitle"
           >
-            {content?.headerTitle || textValues.headerTitle || ""}
+            {content.headerTitle || textValues.headerTitle || ""}
           </h1>
           <p
             contentEditable={isEditing}
             suppressContentEditableWarning={true}
             data-key="headerDesc"
           >
-            {content?.headerDesc || textValues.headerDesc || ""}
+            {content.headerDesc || textValues.headerDesc || ""}
           </p>
         </header>
 
@@ -977,7 +969,7 @@ function App() {
                 suppressContentEditableWarning={true}
                 data-key="card1Desc"
               >
-                {content?.card1Desc || "..."}
+                {content.card1Desc || "..."}
               </p>
             </div>
           </Link>
@@ -1001,7 +993,7 @@ function App() {
                 suppressContentEditableWarning={true}
                 data-key="card2Desc"
               >
-                {content?.card2Desc || "..."}
+                {content.card2Desc || "..."}
               </p>
             </div>
           </Link>
@@ -1025,7 +1017,7 @@ function App() {
                 suppressContentEditableWarning={true}
                 data-key="card3Desc"
               >
-                {content?.card3Desc || "..."}
+                {content.card3Desc || "..."}
               </p>
             </div>
           </Link>
@@ -1033,7 +1025,7 @@ function App() {
 
         <AnimatedContent delay={0.2} duration={1.2}>
           <div className="thumbnail">
-            <img src={thumbnail || content?.thumbnailUrl || video_img} alt="" />
+            <img src={thumbnail || content.thumbnailUrl || video_img} alt="" />
             <div className="actions">
               <div className="upload-video">
                 {videoIcon}
