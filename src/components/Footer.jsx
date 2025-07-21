@@ -42,7 +42,7 @@ export default function Footer() {
             className="right"
           >
             <div className="img">
-              <img src={menuTxt.logoUrl || logo} alt="" />
+              <img src={menuTxt.logoUrl} alt="" />
             </div>
             <div className="text"></div>
           </motion.div>
