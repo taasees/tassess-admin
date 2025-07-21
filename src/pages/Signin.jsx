@@ -93,16 +93,16 @@ export default function Signin() {
           <img src={logo} alt="" />
         </div>
         <div className="txt">
-          <h2>شارك للاستشارات</h2>
+          <h2>تأسيس للاستشارات</h2>
 
           <p>
-            شركة شارِك للإستشارات تقدم خدمات دراسات الجدوى والاستشارات الإدارية
+            شركة تأسيس للإستشارات تقدم خدمات دراسات الجدوى والاستشارات الإدارية
             للمشاريع في قطر والسعودية والإمارات وعمان منذ عام 2010، بخبرة تتجاوز
             13 عامًا وأكثر من 1150 دراسة جدوى ناجحة.
           </p>
         </div>
         <div className="bottom">
-          <p>شركة شارِك للاستشارات جهة موثوقة بخبرة تزيد عن 13 عامًا</p>
+          <p>شركة تأسيس للاستشارات جهة موثوقة بخبرة تزيد عن 13 عامًا</p>
         </div>
       </div>
       <div className="main">
@@ -154,7 +154,7 @@ export default function Signin() {
         <div className="bottom">
           <div className="txt" dir="ltr">
             <TextPressure
-              text="shark-plan.com"
+              text="taasees-consulting.com"
               flex={false}
               alpha={false}
               stroke={false}
