@@ -24,7 +24,7 @@
     }
     .holder {
       position: relative;
-      overflow-y: scroll;
+
       @include flex(flex-start, flex-start, column, 1rem);
       font-family: var(--arabic-fm-r) !important;
       button {
@@ -66,6 +66,8 @@
         @include flex(block flex-start, flex-start, column, 1rem);
         overflow: hidden;
         height: 0;
+        overflow: scroll;
+        max-height: 70vh;
         transition: all 0.5s ease;
         .font {
           width: 100%;
@@ -120,8 +122,8 @@
       fill: var(--light-svg-clr);
     }
     &.active {
-      --x: calc(40dvw + 1rem - 50px);
-      transform: translate(var(--x), var(--y));
+      --x: clamp(300px, 60vw, 700px);
+      transform: translate(calc(var(--x) + 1rem), var(--y));
     }
   }
 }
