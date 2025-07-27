@@ -302,7 +302,7 @@
   transition: all 0.3s ease;
   pointer-events: none;
 }
-.signin-pages .main .form label:has(input:not(:-moz-placeholder-shown)) p {
+.signin-pages .main .form label:has(input:not(:-moz-placeholder)) p {
   transform: translateY(-3ch);
   color: var(--txt-clr);
 }

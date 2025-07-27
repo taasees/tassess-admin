@@ -138,7 +138,6 @@
 }
 .EditLayout .content .holder {
   position: relative;
-  overflow-y: scroll;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -192,6 +191,8 @@
   gap: 1rem;
   overflow: hidden;
   height: 0;
+  overflow: scroll;
+  max-height: 70vh;
   transition: all 0.5s ease;
 }
 .EditLayout .content .holder .choses .font {
@@ -244,8 +245,8 @@
   fill: var(--light-svg-clr);
 }
 .EditLayout .activeBTN.active {
-  --x: calc(40dvw + 1rem - 50px);
-  transform: translate(var(--x), var(--y));
+  --x: clamp(300px, 60vw, 700px);
+  transform: translate(calc(var(--x) + 1rem), var(--y));
 }
 
 @media (max-width: 990px) {
